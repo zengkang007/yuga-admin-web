@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuga.modules.school.dao.checker.YgTimeFieldDao">
+
+	<sql id="ygTimeFieldColumns">
+		a.id AS "id",
+		a.field_name AS "fieldName",
+		a.filed_value AS "filedValue",
+		a.default_mark AS "defaultMark",
+		a.check_time_id AS "checkTimeId",
+		a.mark AS "mark"
+	</sql>
+
+	<sql id="ygTimeFieldJoins">
+	</sql>
+
+	<select id="get" resultType="YgTimeField">
+		SELECT
+		<include refid="ygTimeFieldColumns" />
+		FROM yg_time_field a
+		<include refid="ygTimeFieldJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="YgTimeField">
+		SELECT
+		<include refid="ygTimeFieldColumns" />
+		FROM yg_time_field a
+		<include refid="ygTimeFieldJoins" />
+		<where>
+			<if test="ygTimeCheck != null">
+				AND a.check_time_id = #{ygTimeCheck.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="YgTimeField">
+		SELECT
+		<include refid="ygTimeFieldColumns" />
+		FROM yg_time_field a
+		<include refid="ygTimeFieldJoins" />
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO yg_time_field(
+		field_name,
+		filed_value,
+		check_time_id,
+		default_mark,
+		mark
+		) VALUES (
+		#{fieldName},
+		#{filedValue},
+		#{ygTimeCheck.id},
+		#{defaultMark},
+		#{mark}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE yg_time_field SET
+		field_name = #{fieldName},
+		filed_value = #{filedValue},
+		check_time_id = #{ygTimeCheck.id},
+		mark = #{mark},
+		default_mark = #{defaultMark}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM yg_time_field
+		WHERE id = #{id}
+	</update>
+
+</mapper>

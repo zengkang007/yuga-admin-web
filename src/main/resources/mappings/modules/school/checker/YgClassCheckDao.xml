@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuga.modules.school.dao.checker.YgClassCheckDao">
+    
+	<sql id="ygClassCheckColumns">
+		a.id AS "id",
+		a.class_id AS "classId",
+		a.week_id AS "weekId",
+		a.section_id AS "sectionId",
+		a.course_id AS "courseId",
+		a.teacher_id AS "teacherId",
+		a.check_items AS "checkItems",
+		a.total_mark AS "totalMark",
+		a.check_time_id AS "checkTimeId",
+		a.condition_1 AS "condition1",
+		a.condition_2 AS "condition2",
+		a.condition_3 AS "condition3",
+		a.check_time AS "checkTime"
+	</sql>
+	
+	<sql id="ygClassCheckTop10Columns">
+		b.class_name AS "className",
+ 	    SUM(a.total_mark) totalMark,
+	    b.class_avatar AS "classAvatar",
+	    DATE_FORMAT(a.check_time,'%Y%u') weeks
+	</sql>
+	
+	<sql id="ygClassCheckJoins">
+		LEFT JOIN sys_user u6 ON u6.id = a.teacher_id
+	</sql>
+	
+	<sql id="ygClassCheckTop10Joins">
+		LEFT JOIN sys_user u6 ON u6.id = a.teacher_id
+		LEFT JOIN yg_class b ON b.id = a.class_id
+		LEFT JOIN sys_dict c ON c.VALUE = a.week_id AND c.type = 'yg_week'
+		LEFT JOIN sys_dict d ON d.VALUE = a.section_id AND d.type = 'yg_course_no'
+		LEFT JOIN yg_course e ON e.id = a.course_id
+	</sql>
+    
+	<select id="get" resultType="YgClassCheck">
+		SELECT 
+			<include refid="ygClassCheckColumns"/>
+		FROM yg_class_check a
+		<include refid="ygClassCheckJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="YgClassCheck">
+		SELECT 
+			<include refid="ygClassCheckColumns"/>
+		FROM yg_class_check a
+		<include refid="ygClassCheckJoins"/>
+		<where>
+			
+			<if test="classId != null and classId != ''">
+				AND a.class_id = #{classId}
+			</if>
+			<if test="weekId != null and weekId != ''">
+				AND a.week_id = #{weekId}
+			</if>
+			<if test="sectionId != null and sectionId != ''">
+				AND a.section_id = #{sectionId}
+			</if>
+			<if test="courseId != null and courseId != ''">
+				AND a.course_id = #{courseId}
+			</if>
+			<if test="teacherId != null and teacherId != ''">
+				AND a.teacher_id = #{teacherId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findTop10List" resultType="ClassCheckDTO">
+		SELECT * FROM
+		(
+			 SELECT
+				b.class_name AS "className",
+				SUM(a.total_mark) totalMark,
+				b.class_avatar AS "classAvatar",
+				DATE_FORMAT(a.check_time,'%Y%u') weeks
+			FROM
+				yg_class_check a
+			LEFT JOIN sys_user u6 ON u6.id = a.teacher_id
+			LEFT JOIN yg_class b ON b.id = a.class_id
+			LEFT JOIN sys_dict c ON c.VALUE = a.week_id AND c.type = 'yg_week'
+			LEFT JOIN sys_dict d ON d.VALUE = a.section_id AND d.type = 'yg_course_no'
+			LEFT JOIN yg_course e ON e.id = a.course_id
+			GROUP BY className, weeks, b.class_avatar
+			LIMIT 10
+		) T
+		ORDER BY T.totalMark DESC
+	</select>
+	
+	<select id="findAllList" resultType="YgClassCheck">
+		SELECT 
+			<include refid="ygClassCheckColumns"/>
+		FROM yg_class_check a
+		<include refid="ygClassCheckJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yg_class_check(
+			class_id,
+			week_id,
+			section_id,
+			course_id,
+			teacher_id,
+			condition_1,
+			condition_2,
+			condition_3,
+			check_items,
+			total_mark,
+			check_time_id,
+			check_time,
+			total_absence
+		) VALUES (
+			#{classId},
+			#{weekId},
+			#{sectionId},
+			#{courseId},
+			#{user.id},
+			#{condition1},
+			#{condition2},
+			#{condition3},
+			#{checkItems},
+			#{totalMark},
+			#{timeCheck.id},
+			#{checkTime},
+			#{totalAbsence}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yg_class_check SET 	
+			class_id = #{classId},
+			week_id = #{weekId},
+			section_id = #{sectionId},
+			course_id = #{courseId},
+			teacher_id = #{user.id},
+			condition_1 = #{condition1},
+			condition_2 = #{condition2},
+			condition_3 = #{condition3},
+			check_items = #{checkItems},
+			total_mark = #{totalMark},
+			check_time_id = #{timeCheck.id},
+			check_time = #{checkTime},
+			total_absence = #{totalAbsence}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM yg_class_check
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

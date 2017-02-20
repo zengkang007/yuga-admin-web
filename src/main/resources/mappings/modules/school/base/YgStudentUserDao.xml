@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuga.modules.school.dao.base.YgStudentUserDao">
+    
+	<sql id="ygStudentUserColumns">
+		a.id AS "id",
+		a.school_no AS "schoolNo",
+		a.contact_user_name AS "contactUserName",
+		a.contact_tel_no AS "contactTelNo",
+		a.address AS "address",
+		a.grade_no AS "gradeNo",
+		a.user_id AS "user.id",
+		u7.name AS "user.name"
+	</sql>
+	
+	<sql id="ygStudentUserJoins">
+		LEFT JOIN sys_user u7 ON u7.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="YgStudentUser">
+		SELECT 
+			<include refid="ygStudentUserColumns"/>
+		FROM yg_student_user a
+		<include refid="ygStudentUserJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="YgStudentUser">
+		SELECT 
+			<include refid="ygStudentUserColumns"/>
+		FROM yg_student_user a
+		<include refid="ygStudentUserJoins"/>
+		<where>
+			
+			<if test="schoolNo != null and schoolNo != ''">
+				AND a.school_no = #{schoolNo}
+			</if>
+			<if test="contactUserName != null and contactUserName != ''">
+				AND a.contact_user_name = #{contactUserName}
+			</if>
+			<if test="contactTelNo != null and contactTelNo != ''">
+				AND a.contact_tel_no = #{contactTelNo}
+			</if>
+			<if test="address != null and address != ''">
+				AND a.address = #{address}
+			</if>
+			<if test="gradeNo != null and gradeNo != ''">
+				AND a.grade_no = #{gradeNo}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="YgStudentUser">
+		SELECT 
+			<include refid="ygStudentUserColumns"/>
+		FROM yg_student_user a
+		<include refid="ygStudentUserJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yg_student_user(
+			school_no,
+			contact_user_name,
+			contact_tel_no,
+			address,
+			grade_no,
+			user_id
+		) VALUES (
+			#{schoolNo},
+			#{contactUserName},
+			#{contactTelNo},
+			#{address},
+			#{gradeNo},
+			#{user.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yg_student_user SET 	
+			school_no = #{schoolNo},
+			contact_user_name = #{contactUserName},
+			contact_tel_no = #{contactTelNo},
+			address = #{address},
+			grade_no = #{gradeNo},
+			user_id = #{user.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM yg_student_user
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

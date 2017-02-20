@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuga.modules.cst.dao.ConsultantDao">
+    
+	<sql id="consultantColumns">
+		a.id AS "id",
+		a.skill_level AS "skillLevel",
+		a.location_city AS "locationCity",
+		a.project_length AS "projectLength",
+		a.start_date AS "startDate",
+		a.out_source AS "outSource",
+		a.delivery_mode AS "deliveryMode",
+		a.govt_clearnce AS "govtClearnce",
+		a.notes AS "notes",
+		a.form_status As "formStatus",
+		a.submitter AS "submitter",
+		a.is_book AS "isBook",
+		a.create_date AS "createDate",
+	  	a.book_user_id AS "bookUserId"
+	</sql>
+	<sql id="consultantJoins">
+	</sql>
+    
+	<select id="get" resultType="Consultant">
+		SELECT 
+			<include refid="consultantColumns"/>
+		FROM yg_consultant a
+		<include refid="consultantJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Consultant">
+		SELECT 
+			<include refid="consultantColumns"/>
+		FROM yg_consultant a
+		<include refid="consultantJoins"/>
+		<where>
+			
+			<if test="skillLevel != null and skillLevel != ''">
+				AND a.skill_level = #{skillLevel}
+			</if>
+			<if test="locationCity != null and locationCity != ''">
+				AND a.location_city = #{locationCity}
+			</if>
+			<if test="projectLength != null and projectLength != ''">
+				AND a.project_length = #{projectLength}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND a.start_date = #{startDate}
+			</if>
+			<if test="outSource != null and outSource != ''">
+				AND a.out_source = #{outSource}
+			</if>
+			<if test="deliveryMode != null and deliveryMode != ''">
+				AND a.delivery_mode = #{deliveryMode}
+			</if>
+			<if test="govtClearnce != null and govtClearnce != ''">
+				AND a.govt_clearnce = #{govtClearnce}
+			</if>
+			<if test="formStatus != null">
+				AND a.form_status = #{formStatus}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY id DESC
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findMyList" resultType="Consultant">
+		SELECT
+		<include refid="consultantColumns"/>
+		FROM yg_consultant a
+		<include refid="consultantJoins"/>
+		<where>
+
+			<if test="skillLevel != null and skillLevel != ''">
+				AND a.skill_level = #{skillLevel}
+			</if>
+			<if test="locationCity != null and locationCity != ''">
+				AND a.location_city = #{locationCity}
+			</if>
+			<if test="projectLength != null and projectLength != ''">
+				AND a.project_length = #{projectLength}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND a.start_date = #{startDate}
+			</if>
+			<if test="outSource != null and outSource != ''">
+				AND a.out_source = #{outSource}
+			</if>
+			<if test="deliveryMode != null and deliveryMode != ''">
+				AND a.delivery_mode = #{deliveryMode}
+			</if>
+			<if test="govtClearnce != null and govtClearnce != ''">
+				AND a.govt_clearnce = #{govtClearnce}
+			</if>
+			<if test="submitter != null  and submitter != ''">
+				AND a.submitter = #{submitter}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="Consultant">
+		SELECT 
+			<include refid="consultantColumns"/>
+		FROM yg_consultant a
+		<include refid="consultantJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="formStatus == 1 and page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yg_consultant(
+			skill_level,
+			location_city,
+			project_length,
+			start_date,
+			out_source,
+			delivery_mode,
+			govt_clearnce,
+			notes,
+			form_status,
+			submitter,
+			is_book,
+			create_date,
+			book_user_id
+		) VALUES (
+			#{skillLevel},
+			#{locationCity},
+			#{projectLength},
+			#{startDate},
+			#{outSource},
+			#{deliveryMode},
+			#{govtClearnce},
+			#{notes},
+			#{formStatus},
+			#{submitter},
+			#{isBook},
+			#{createDate},
+			#{bookUserId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yg_consultant SET 	
+			skill_level = #{skillLevel},
+			location_city = #{locationCity},
+			project_length = #{projectLength},
+			start_date = #{startDate},
+			out_source = #{outSource},
+			delivery_mode = #{deliveryMode},
+			govt_clearnce = #{govtClearnce},
+			notes = #{notes},
+			form_status = #{formStatus},
+			submitter = #{submitter},
+			is_book = #{isBook},
+			book_user_id = #{bookUserId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM yg_consultant
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

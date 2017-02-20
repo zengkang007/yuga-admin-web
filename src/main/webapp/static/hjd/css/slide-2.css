@@ -1,0 +1,90 @@
+.ca1_slide{ float:center; width:980px; height:440px;}
+#slider-wrapper {
+    position: relative;
+    width: 1000px;
+    height:440px;
+}
+#slider-bg {
+    height:440px;
+    width: 980px;
+	padding:0px;
+}
+#slider-photos {
+	height: 440px;
+	position:absolute;
+	width: 980px;
+	left: 0px;
+	top: 0px;
+}
+#slides {
+    left: 0;
+    position: absolute;
+    top: 0;
+    z-index:100;
+}
+.slides_container {
+    display: none;
+    overflow: hidden;
+    position: relative;
+    width: 980px;
+}
+.entry .slides_container {
+    width: 1000px;
+}
+.slides_container div.slide {
+    display: block;
+    height: 300px;
+    width: 980px;
+    margin-top: 101px;
+}
+#slides .prev{
+	display: block;
+	height: 68px;
+	position: absolute;
+	top: 150px;
+	width: 34px;
+	z-index: 101;
+	left: -2px;
+}
+#slides .next {
+    left: 871px;
+	display: block;
+    height: 68px;
+    position: absolute;
+    top: 150px;
+    width: 34px;
+    z-index: 101;
+}
+a.portfolio-slide-prev, a.portfolio-slide-next {
+}
+.pagination {
+    margin: 0 auto;
+    width: 120px;
+    height: 34px;
+}
+.pagination li {
+    float: left;
+    list-style: none outside none;
+    margin: 0 3px;
+    padding: 0;
+    height: 14px;
+    padding-top: 6px;
+}
+.pagination li a {
+    background: url("../img/slider-pagination.png") repeat scroll 0 -14px transparent;
+    display: block;
+    float: left;
+    height: 0;
+    overflow: hidden;
+    padding-top: 14px;
+    width: 14px;
+}
+.pagination li.current a {
+    background: url("../img/slider-pagination.png") repeat scroll 0 0 transparent;
+}
+
+
+#icon1{ text-align:left; clear:both; margin-left:60px; width:840px;}
+#icon1 a{float:left; width:60px; height:100px; margin-right:15px; margin-bottom:20px; color:#FFFFFF; font-size:14px; text-decoration:none; text-align:center;}
+#icon1 a:hover{ color:#FF0000; text-align:center;}
+#icon1 a img{ padding-bottom:5px;}

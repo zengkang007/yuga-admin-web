@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuga.modules.school.dao.base.YgTeacherUserDao">
+    
+	<sql id="ygTeacherUserColumns">
+		a.id AS "id",
+		a.user_id AS "user.id",
+		a.class_id AS "classId",
+		u2.name AS "user.name"
+	</sql>
+	
+	<sql id="ygTeacherUserJoins">
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="YgTeacherUser">
+		SELECT 
+			<include refid="ygTeacherUserColumns"/>
+		FROM yg_teacher_user a
+		<include refid="ygTeacherUserJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="YgTeacherUser">
+		SELECT 
+			<include refid="ygTeacherUserColumns"/>
+		FROM yg_teacher_user a
+		<include refid="ygTeacherUserJoins"/>
+		<where>
+			
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="classId != null and classId != ''">
+				AND a.class_id = #{classId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="YgTeacherUser">
+		SELECT 
+			<include refid="ygTeacherUserColumns"/>
+		FROM yg_teacher_user a
+		<include refid="ygTeacherUserJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yg_teacher_user(
+			user_id,
+			class_id
+		) VALUES (
+			#{user.id},
+			#{classId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yg_teacher_user SET 	
+			user_id = #{user.id},
+			class_id = #{classId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM yg_teacher_user
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

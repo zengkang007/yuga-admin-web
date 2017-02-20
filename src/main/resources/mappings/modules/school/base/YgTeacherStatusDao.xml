@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuga.modules.school.dao.base.YgTeacherStatusDao">
+    
+	<sql id="ygTeacherStatusColumns">
+		a.id AS "id",
+		a.level AS "level",
+		a.content AS "content"
+	</sql>
+	
+	<sql id="ygTeacherStatusJoins">
+	</sql>
+    
+	<select id="get" resultType="YgTeacherStatus">
+		SELECT 
+			<include refid="ygTeacherStatusColumns"/>
+		FROM yg_teacher_status a
+		<include refid="ygTeacherStatusJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="YgTeacherStatus">
+		SELECT 
+			<include refid="ygTeacherStatusColumns"/>
+		FROM yg_teacher_status a
+		<include refid="ygTeacherStatusJoins"/>
+		<where>
+			
+			<if test="level != null and level != ''">
+				AND a.level = #{level}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="YgTeacherStatus">
+		SELECT 
+			<include refid="ygTeacherStatusColumns"/>
+		FROM yg_teacher_status a
+		<include refid="ygTeacherStatusJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yg_teacher_status(
+			level,
+			content
+		) VALUES (
+			#{level},
+			#{content}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yg_teacher_status SET 	
+			level = #{level},
+			content = #{content}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM yg_teacher_status
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

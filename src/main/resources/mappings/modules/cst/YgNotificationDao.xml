@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuga.modules.cst.dao.YgNotificationDao">
+    
+	<sql id="ygNotificationColumns">
+		a.id AS "id",
+		a.title AS "title",
+		a.content AS "content",
+		a.create_time AS "createTime",
+		a.priority AS "priority",
+		a.create_by AS "createBy.id",
+		a.is_read AS "isRead"
+	</sql>
+	
+	<sql id="ygNotificationJoins">
+	</sql>
+    
+	<select id="get" resultType="YgNotification">
+		SELECT 
+			<include refid="ygNotificationColumns"/>
+		FROM yg_notification a
+		<include refid="ygNotificationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="YgNotification">
+		SELECT 
+			<include refid="ygNotificationColumns"/>
+		FROM yg_notification a
+		<include refid="ygNotificationJoins"/>
+		<where>
+			
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="content != null and content != ''">
+				AND a.content LIKE 
+					<if test="dbName == 'oracle'">'%'||#{content}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{content}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{content},'%')</if>
+			</if>
+			<if test="createTime != null and createTime != ''">
+				AND a.create_time = #{createTime}
+			</if>
+			<if test="priority != null and priority != ''">
+				AND a.priority = #{priority}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="YgNotification">
+		SELECT 
+			<include refid="ygNotificationColumns"/>
+		FROM yg_notification a
+		<include refid="ygNotificationJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yg_notification(
+			title,
+			content,
+			create_time,
+			priority,
+			create_by,
+			is_read
+		) VALUES (
+			#{title},
+			#{content},
+			#{createTime},
+			#{priority},
+			#{createBy.id},
+			#{isRead}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yg_notification SET 	
+			title = #{title},
+			content = #{content},
+			create_time = #{createTime},
+			priority = #{priority},
+			is_read = #{isRead}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM yg_notification
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

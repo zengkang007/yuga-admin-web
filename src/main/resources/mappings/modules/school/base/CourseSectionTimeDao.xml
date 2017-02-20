@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuga.modules.school.dao.base.CourseSectionTimeDao">
+    
+	<sql id="courseSectionTimeColumns">
+		a.id AS "id",
+		a.section_id AS "sectionId",
+		a.start_time AS "startTime",
+		a.end_time AS "endTime"
+	</sql>
+	
+	<sql id="courseSectionTimeJoins">
+	</sql>
+    
+	<select id="get" resultType="CourseSectionTime">
+		SELECT 
+			<include refid="courseSectionTimeColumns"/>
+		FROM yg_course_section_time a
+		<include refid="courseSectionTimeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CourseSectionTime">
+		SELECT 
+			<include refid="courseSectionTimeColumns"/>
+		FROM yg_course_section_time a
+		<include refid="courseSectionTimeJoins"/>
+		<where>
+			
+			<if test="sectionId != null and sectionId != ''">
+				AND a.section_id = #{sectionId}
+			</if>
+			<if test="startTime != null and startTime != ''">
+				AND a.start_time = #{startTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				AND a.end_time = #{endTime}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CourseSectionTime">
+		SELECT 
+			<include refid="courseSectionTimeColumns"/>
+		FROM yg_course_section_time a
+		<include refid="courseSectionTimeJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yg_course_section_time(
+			section_id,
+			start_time,
+			end_time
+		) VALUES (
+			#{sectionId},
+			#{startTime},
+			#{endTime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yg_course_section_time SET 	
+			section_id = #{sectionId},
+			start_time = #{startTime},
+			end_time = #{endTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM yg_course_section_time
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

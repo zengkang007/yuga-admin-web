@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuga.modules.school.dao.base.YgClassDao">
+    
+	<sql id="ygClassColumns">
+		a.id AS "id",
+		a.create_time AS "createTime",
+		a.class_name AS "className",
+		a.class_grade AS "classGrade",
+		a.class_address AS "classAddress",
+		a.class_count AS "classCount",
+		a.class_avatar AS "classAvatar"
+	</sql>
+	
+	<sql id="ygClassJoins">
+	</sql>
+    
+	<select id="get" resultType="YgClass">
+		SELECT 
+			<include refid="ygClassColumns"/>
+		FROM yg_class a
+		<include refid="ygClassJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="YgClass">
+		SELECT 
+			<include refid="ygClassColumns"/>
+		FROM yg_class a
+		<include refid="ygClassJoins"/>
+		<where>
+			
+			<if test="createTime != null and createTime != ''">
+				AND a.create_time = #{createTime}
+			</if>
+			<if test="className != null and className != ''">
+				AND a.class_name = #{className}
+			</if>
+			<if test="classGrade != null and classGrade != ''">
+				AND a.class_grade = #{classGrade}
+			</if>
+			<if test="classAddress != null and classAddress != ''">
+				AND a.class_address = #{classAddress}
+			</if>
+			<if test="classCount != null and classCount != ''">
+				AND a.class_count = #{classCount}
+			</if>			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="YgClass">
+		SELECT 
+			<include refid="ygClassColumns"/>
+		FROM yg_class a
+		<include refid="ygClassJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yg_class(
+			create_time,
+			class_name,
+			class_grade,
+			class_address,
+			class_count,
+			class_avatar
+		) VALUES (
+			#{createTime},
+			#{className},
+			#{classGrade},
+			#{classAddress},
+			#{classCount},
+			#{classAvatar}			
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yg_class SET 	
+			create_time = #{createTime},
+			class_name = #{className},
+			class_grade = #{classGrade},
+			class_address = #{classAddress},
+			class_count = #{classCount},
+			class_avatar = #{classAvatar}	
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM yg_class
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

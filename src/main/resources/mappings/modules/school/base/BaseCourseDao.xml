@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuga.modules.school.dao.base.BaseCourseDao">
+
+	<sql id="baseCourseColumns">
+		a.id AS "id",
+		a.class_id AS "classId",
+		a.week_id AS "weekId",
+		a.section AS "section",
+		a.course_id AS "courseId",
+		a.teacher_id AS
+		"teacherId",
+		a.month_start AS "monthStart",
+		a.month_end AS "monthEnd"
+	</sql>
+
+	<sql id="baseCourseJoins">
+	</sql>
+
+	<select id="get" resultType="BaseCourse">
+		SELECT
+		<include refid="baseCourseColumns" />
+		FROM yg_base_course a
+		<include refid="baseCourseJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="BaseCourse">
+		SELECT
+		<include refid="baseCourseColumns" />
+		FROM yg_base_course a
+		<include refid="baseCourseJoins" />
+		<where>
+			<if test="classId != null and classId != ''">
+				AND a.class_id = #{classId}
+			</if>
+			<if test="weekId != null and weekId != ''">
+				AND a.week_id = #{weekId}
+			</if>
+			<if test="section != null and section != ''">
+				AND a.section = #{section}
+			</if>
+			<if test="qType != null">
+				<![CDATA[ 
+					AND DATE_FORMAT(CONCAT(a.month_start, '-01'), '%Y-%m') <= DATE_FORMAT(NOW(), '%Y-%m')
+					AND DATE_FORMAT(CONCAT(a.month_end, '-01'), '%Y-%m') >= DATE_FORMAT(NOW(), '%Y-%m')
+				]]>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} 
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="BaseCourse">
+		SELECT
+		<include refid="baseCourseColumns" />
+		FROM yg_base_course a
+		<include refid="baseCourseJoins" />
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO yg_base_course(
+		class_id,
+		week_id,
+		section,
+		course_id,
+		teacher_id,
+		month_start,
+		month_end
+		) VALUES (
+		#{classId},
+		#{weekId},
+		#{section},
+		#{courseId},
+		#{user.id},
+		#{monthStart},
+		#{monthEnd}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE yg_base_course SET
+		class_id = #{classId},
+		week_id = #{weekId},
+		section = #{section},
+		course_id = #{courseId},
+		teacher_id = #{user.id},
+		month_start = #{monthStart},
+		month_end = #{monthEnd}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM yg_base_course
+		WHERE id = #{id}
+	</update>
+
+</mapper>

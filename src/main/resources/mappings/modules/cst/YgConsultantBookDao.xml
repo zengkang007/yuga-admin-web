@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuga.modules.cst.dao.YgConsultantBookDao">
+    
+	<sql id="ygConsultantBookColumns">
+		a.id AS "id",
+		a.consultant_id AS "consultantId",
+		a.user_id AS "user.id",
+		u3.name AS "user.name"
+	</sql>
+	
+	<sql id="ygConsultantBookJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="YgConsultantBook">
+		SELECT 
+			<include refid="ygConsultantBookColumns"/>
+		FROM yg_consultant_book a
+		<include refid="ygConsultantBookJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="YgConsultantBook">
+		SELECT 
+			<include refid="ygConsultantBookColumns"/>
+		FROM yg_consultant_book a
+		<include refid="ygConsultantBookJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="YgConsultantBook">
+		SELECT 
+			<include refid="ygConsultantBookColumns"/>
+		FROM yg_consultant_book a
+		<include refid="ygConsultantBookJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yg_consultant_book(
+			consultant_id,
+			user_id
+		) VALUES (
+			#{consultantId},
+			#{user.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yg_consultant_book SET 	
+			consultant_id = #{consultantId},
+			user_id = #{user.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM yg_consultant_book
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuga.modules.school.dao.base.YgCourseTimeDao">
+    
+	<sql id="ygCourseTimeColumns">
+		a.id AS "id",
+		a.course_name AS "courseName",
+		a.time_range AS "timeRange",
+		a.param_1 AS "param1",
+		a.param_2 AS "param2",
+		a.param_3 AS "param3",
+		a.param_4 AS "param4"
+	</sql>
+	
+	<sql id="ygCourseTimeJoins">
+	</sql>
+    
+	<select id="get" resultType="YgCourseTime">
+		SELECT 
+			<include refid="ygCourseTimeColumns"/>
+		FROM yg_course_time a
+		<include refid="ygCourseTimeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="YgCourseTime">
+		SELECT 
+			<include refid="ygCourseTimeColumns"/>
+		FROM yg_course_time a
+		<include refid="ygCourseTimeJoins"/>
+		<where>
+			
+			<if test="courseName != null and courseName != ''">
+				AND a.course_name = #{courseName}
+			</if>
+			<if test="timeRange != null and timeRange != ''">
+				AND a.time_range = #{timeRange}
+			</if>
+			<if test="param1 != null and param1 != ''">
+				AND a.param_1 = #{param1}
+			</if>
+			<if test="param2 != null and param2 != ''">
+				AND a.param_2 = #{param2}
+			</if>
+			<if test="param3 != null and param3 != ''">
+				AND a.param_3 = #{param3}
+			</if>
+			<if test="param4 != null and param4 != ''">
+				AND a.param_4 = #{param4}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="YgCourseTime">
+		SELECT 
+			<include refid="ygCourseTimeColumns"/>
+		FROM yg_course_time a
+		<include refid="ygCourseTimeJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yg_course_time(
+			course_name,
+			time_range,
+			param_1,
+			param_2,
+			param_3,
+			param_4
+		) VALUES (
+			#{courseName},
+			#{timeRange},
+			#{param1},
+			#{param2},
+			#{param3},
+			#{param4}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yg_course_time SET 	
+			course_name = #{courseName},
+			time_range = #{timeRange},
+			param_1 = #{param1},
+			param_2 = #{param2},
+			param_3 = #{param3},
+			param_4 = #{param4}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM yg_course_time
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

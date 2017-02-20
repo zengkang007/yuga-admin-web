@@ -1,0 +1,23 @@
+请求班级排名
+
+http://localhost:8080/yuga-admin-web/api/rest/getTop10
+
+返回
+[
+    {
+        "isNewRecord":true,
+        "className":"一(2)班",
+        "totalMark":"120"
+    },
+    {
+        "isNewRecord":true,
+        "className":"三年级一班",
+        "totalMark":"83"
+    },
+    {
+        "isNewRecord":true,
+        "className":"三年级二班",
+        "totalMark":"50",
+        "classAvatar":"/yuga-admin-web/userfiles/1/images/school/course/2016/11/QQ%E5%9B%BE%E7%89%8720150928214707.jpg"
+    }
+]
