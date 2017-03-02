@@ -95,9 +95,6 @@ public class BaseCourseService extends CrudService<BaseCourseDao, BaseCourse> {
 	/**
 	 * 通过班级、星期、节次查询基础课表对象
 	 * 还有根据课表的时间范围
-	 * @param classId    班级Id
-	 * @param weekId     星期对应id
-	 * @param sectionId  节次 
 	 * @return
 	 */
 	public BaseCourse getCourseInfo(BaseCourse baseInfo){

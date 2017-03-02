@@ -3,17 +3,14 @@
 		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 		xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.yuga</groupId>
-		<artifactId>yuga-master</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>
-	<artifactId>yuga-admin-web</artifactId>
 	<packaging>war</packaging>
 	<name>yuga-admin-web Maven Webapp</name>
+	<groupId>com.yuga</groupId>
+	<artifactId>yuga-admin-web</artifactId>
+	<version>0.0.1</version>
 	<url>http://maven.apache.org</url>
 
-	<!-- 项目属性 -->
+<!-- 项目属性 -->
 	<properties>
 
 		<!-- main version setting -->
@@ -63,69 +60,68 @@
 		<!-- 如有Nexus私服, 取消注释并指向正确的服务器地址. <repository> <id>nexus-repos</id> <name>Team
 			Nexus Repository</name> <url>http://192.168.11.36:8888/nexus/content/groups/public</url>
 			</repository> -->
-		<repository>
-			<id>0-repos</id>
-			<name>0 Releases</name>
-			<url>http://120.24.73.53:8081/nexus/content/groups/public/</url>
-		</repository>
-		<repository>
-			<id>alibaba</id>
-			<name>alibaba release</name>
-			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-		</repository>
+		<!--<repository>-->
+			<!--<id>alibaba</id>-->
+			<!--<name>alibaba release</name>-->
+			<!--<url>http://maven.aliyun.com/nexus/content/groups/public/</url>-->
+		<!--</repository>-->
 		<repository>
 			<id>1-repos</id>
 			<name>1 Releases</name>
 			<url>http://repo1.maven.org/maven2/</url>
 		</repository>
-		<repository>
-			<id>2-repos</id>
-			<name>2 Releases</name>
-			<url>http://repository.jboss.com/maven2/</url>
-		</repository>
-		<repository>
-			<id>3-repos</id>
-			<name>3 Releases</name>
-			<url>http://repository.sonatype.org/content/groups/public/</url>
-		</repository>
-		<repository>
-			<id>java-repos</id>
-			<name>Java Repository</name>
-			<url>http://download.java.net/maven/2/</url>
-		</repository>
-		<repository>
-			<id>springsource-repos</id>
-			<name>SpringSource
-				Repository</name>
-			<url>http://repo.spring.io/release/</url>
-		</repository>
-		<repository>
-			<id>central-repos</id>
-			<name>Central Repository</name>
-			<url>http://repo.maven.apache.org/maven2</url>
-		</repository>
-		<repository>
-			<id>activiti-repos</id>
-			<name>Activiti Repository</name>
-			<url>https://maven.alfresco.com/nexus/content/groups/public</url>
-		</repository>
-		<repository>
-			<id>activiti-repos2</id>
-			<name>Activiti Repository
-				2</name>
-			<url>https://app.camunda.com/nexus/content/groups/public</url>
-		</repository>
+		<!--<repository>-->
+			<!--<id>2-repos</id>-->
+			<!--<name>2 Releases</name>-->
+			<!--<url>http://repository.jboss.com/maven2/</url>-->
+		<!--</repository>-->
+		<!--<repository>-->
+			<!--<id>3-repos</id>-->
+			<!--<name>3 Releases</name>-->
+			<!--<url>http://repository.sonatype.org/content/groups/public/</url>-->
+		<!--</repository>-->
+		<!--<repository>-->
+			<!--<id>java-repos</id>-->
+			<!--<name>Java Repository</name>-->
+			<!--<url>http://download.java.net/maven/2/</url>-->
+		<!--</repository>-->
+		<!--<repository>-->
+			<!--<id>springsource-repos</id>-->
+			<!--<name>SpringSource-->
+				<!--Repository</name>-->
+			<!--<url>http://repo.spring.io/release/</url>-->
+		<!--</repository>-->
+		<!--<repository>-->
+			<!--<id>central-repos</id>-->
+			<!--<name>Central Repository</name>-->
+			<!--<url>http://repo.maven.apache.org/maven2</url>-->
+		<!--</repository>-->
+		<!--<repository>-->
+			<!--<id>activiti-repos</id>-->
+			<!--<name>Activiti Repository</name>-->
+			<!--<url>https://maven.alfresco.com/nexus/content/groups/public</url>-->
+		<!--</repository>-->
+		<!--<repository>-->
+			<!--<id>activiti-repos2</id>-->
+			<!--<name>Activiti Repository-->
+				<!--2</name>-->
+			<!--<url>https://app.camunda.com/nexus/content/groups/public</url>-->
+		<!--</repository>-->
 	</repositories>
 	<!-- 设定插件仓库 -->
-	<pluginRepositories>
+	<!--<pluginRepositories>-->
 
 		<!-- 如有Nexus私服, 取消注释并指向正确的服务器地址. -->
-		<pluginRepository>
-			<id>nexus-repos</id>
-			<name>Team Nexus Repository</name>
-			<url>http://120.24.73.53:8081/nexus/content/groups/public/</url>
-		</pluginRepository>
-	</pluginRepositories> <!-- 依赖项定义 -->
+		<!--<pluginRepository>-->
+			<!--<id>nexus-repos</id>-->
+			<!--<name>Team Nexus Repository</name>-->
+			<!--<url>http://120.24.73.53:8081/nexus/content/groups/public/</url>-->
+		<!--</pluginRepository><pluginRepository>-->
+			<!--<id>nexus-repos</id>-->
+			<!--<name>Team Nexus Repository</name>-->
+			<!--<url>http://120.24.73.53:8081/nexus/content/groups/public/</url>-->
+		<!--</pluginRepository>-->
+	<!--</pluginRepositories> &lt;!&ndash; 依赖项定义 &ndash;&gt;-->
 	<dependencies>
 		<dependency>
 			<groupId>xerces</groupId>

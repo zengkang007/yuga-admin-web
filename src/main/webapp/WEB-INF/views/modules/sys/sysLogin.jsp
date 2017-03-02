@@ -20,6 +20,11 @@
     </style>
 	<script type="text/javascript">
 		$(document).ready(function() {
+
+            $('#btnSignUp').click(function(){
+                window.location.href = '/b/signup';
+            });
+
 			$("#loginForm").validate({
 				rules: {
 					validateCode: {remote: "${pageContext.request.contextPath}/servlet/validateCodeServlet"}
@@ -47,6 +52,7 @@
 			$('.form-signin').css({'top':top,'left':left});
 			$('.footer').css({'top':top+250,'left':left+30});
 		});
+
 	</script>
 </head>
 <body>
@@ -68,6 +74,7 @@
 		</div></c:if><%--
 		<label for="mobile" title="手机登录"><input type="checkbox" id="mobileLogin" name="mobileLogin" ${mobileLogin ? 'checked' : ''}/></label> --%>
 		<input class="btn btn-large btn-primary" type="submit" value="Login"/>&nbsp;&nbsp;
+		<input id="btnSignUp" class="btn btn-large btn-primary" type="button" value="Sign Up"/>&nbsp;&nbsp;
 		<label for="rememberMe" title="Remember" style="color:#fff"><input type="checkbox" id="rememberMe" name="rememberMe" ${rememberMe ? 'hecked' : ''}/>Remember Me </label>
 		<div id="themeSwitch" class="dropdown">
 			<a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color:#fff">${fns:getDictLabel(cookie.theme.value,'theme','Default Theme')}<b class="caret"></b></a>
@@ -78,7 +85,7 @@
 		</div>
 	</form>
 	<div class="footer">
-		Copyright &copy; 2012-${fns:getConfig('copyrightYear')} <a href="${pageContext.request.contextPath}${fns:getFrontPath()}">${fns:getConfig('productName')}</a> - Powered By <a href="http://ksm.com" target="_blank">ksm</a> ${fns:getConfig('version')}
+		Copyright &copy; 2012-${fns:getConfig('copyrightYear')} <a href="${pageContext.request.contextPath}${fns:getFrontPath()}">${fns:getConfig('productName')}</a> - Powered By <a href="http://ksm.com" target="_blank">Yuga Studio</a> ${fns:getConfig('version')}
 	</div>
 	<script src="${ctxStatic}/flash/zoom.min.js" type="text/javascript"></script>
 </body>
