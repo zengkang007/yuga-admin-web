@@ -69,6 +69,7 @@
 				<th>Location City</th>
 				<th>Project Length</th>
 				<th>Bids</th>
+				<th>Current Bid</th>
 				<th>Out Source</th>
 				<th>Delivery Mode</th>
 				<th>Govt Clearnce</th>
@@ -94,6 +95,9 @@
 					${consultant.totalBidding}
 				</td>
 				<td>
+					${consultant.currentBid}
+				</td>
+				<td>
 					${fns:getDictLabel(consultant.outSource, 'yg_cs_out_yesno', '')}
 				</td>
 				<td>
@@ -106,7 +110,7 @@
 						${fns:getUserById(consultant.submitter).name}
 				</td>
 				<td>
-					<a href="${ctx}/cst/bidding/bidConfirm?id=${consultant.id}">Place Bid</a>
+					<a href="${ctx}/cst/bidding/bidConfirm?consultantId=${consultant.id}">Place Bid</a>
 				</td>
 				<td>
 					<c:choose>

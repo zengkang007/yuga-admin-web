@@ -32,7 +32,13 @@
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="consultant" action="${ctx}/cst/consultant/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
-		<sys:message content="${message}"/>		
+		<sys:message content="${message}"/>
+		<div class="control-group">
+			<label class="control-label">Consultant Name：</label>
+			<div class="controls">
+				<form:input path="name" htmlEscape="false" maxlength="11" class="input-xlarge "/>
+			</div>
+		</div>
 		<div class="control-group">
 			<label class="control-label">Skill Level：</label>
 			<div class="controls">

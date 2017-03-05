@@ -10,6 +10,15 @@
 	<short-name>fns</short-name>
 	<uri>http://java.sun.com/jsp/jstl/functionss</uri>
 
+	<!-- 新增 -->
+	<function>
+		<description>根据编码获取顾问对象</description>
+		<name>getConsultantById</name>
+		<function-class>com.yuga.modules.cst.utils.ConsultantUtil</function-class>
+		<function-signature>com.yuga.modules.cst.entity.Consultant getConsultantById(java.lang.String)</function-signature>
+		<example>${fns:getConsultantById(id)}</example>
+	</function>
+
 	<!-- 自定义结束 -->	
 	<function>
 		<description>获取管理路径</description>

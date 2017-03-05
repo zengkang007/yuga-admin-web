@@ -20,6 +20,7 @@ public class Consultant extends DataEntity<Consultant> {
 	
 	private static final long serialVersionUID = 1L;
 	private String skillLevel;		// Skill Level
+	private String name; //Consultant Name
 	private String locationCity;		// Location City
 	private String projectLength;		// Project Length
 	private Date startDate;		// Start Date
@@ -34,6 +35,7 @@ public class Consultant extends DataEntity<Consultant> {
 	private String bookUserId;
 	private String biddingLast;
 	private String totalBidding;
+	private String currentBid;
 
 	public Consultant() {
 		super();
@@ -41,6 +43,22 @@ public class Consultant extends DataEntity<Consultant> {
 
 	public Consultant(String id){
 		super(id);
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getCurrentBid() {
+		return currentBid;
+	}
+
+	public void setCurrentBid(String currentBid) {
+		this.currentBid = currentBid;
 	}
 
 	public String getBiddingLast() {

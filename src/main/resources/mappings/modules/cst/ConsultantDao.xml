@@ -4,6 +4,7 @@
     
 	<sql id="consultantColumns">
 		a.id AS "id",
+		a.name AS "name",
 		a.skill_level AS "skillLevel",
 		a.location_city AS "locationCity",
 		a.project_length AS "projectLength",
@@ -18,7 +19,8 @@
 		a.create_date AS "createDate",
 	  	a.book_user_id AS "bookUserId",
 	  	TIMESTAMPDIFF(SECOND, now(), a.bid_valid_end ) AS "biddingLast",
-		b.total_bidding AS "totalBidding"
+		b.total_bidding AS "totalBidding",
+		c.current_bid AS "currentBid"
 	</sql>
 	<sql id="consultantJoins">
 		LEFT JOIN (
@@ -26,7 +28,13 @@
 		   		from yg_bidding
 		   		group by consultant_id)
 		   	as b
-		on b.consultant_id = a.id;
+		on b.consultant_id = a.id
+		LEFT JOIN
+		(select max(current_bid) current_bid, consultant_id
+		   from yg_bidding
+		   group by consultant_id)
+		AS c
+		ON c.consultant_id = a.id
 	</sql>
     
 	<select id="get" resultType="Consultant">
@@ -41,15 +49,7 @@
 		SELECT 
 			<include refid="consultantColumns"/>
 		FROM yg_consultant a
-		<!--<include refid="consultantJoins"/>-->
-		LEFT JOIN (
-			select count(id) total_bidding, consultant_id
-			from yg_bidding
-			group by consultant_id
-		)
-		as b
-		on b.consultant_id = a.id
-
+		<include refid="consultantJoins"/>
 		<where>
 			
 			<if test="skillLevel != null and skillLevel != ''">
@@ -147,6 +147,7 @@
 	<insert id="insert">
 		INSERT INTO yg_consultant(
 			skill_level,
+			name,
 			location_city,
 			project_length,
 			start_date,
@@ -161,6 +162,7 @@
 			book_user_id
 		) VALUES (
 			#{skillLevel},
+			#{name},
 			#{locationCity},
 			#{projectLength},
 			#{startDate},
@@ -179,6 +181,7 @@
 	<update id="update">
 		UPDATE yg_consultant SET 	
 			skill_level = #{skillLevel},
+			name = #{name},
 			location_city = #{locationCity},
 			project_length = #{projectLength},
 			start_date = #{startDate},
