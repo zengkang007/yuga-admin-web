@@ -16,6 +16,7 @@
 				/static/** = anon
 				/userfiles/** = anon
 				${adminPath}/api/** = anon
+				${adminPath}/b = anon
 				/api/rest/** = anon
 				${adminPath}/admin/update/appUpdate/upgrade = anon
 				${adminPath}/admin/ipRoute/getIp = anon

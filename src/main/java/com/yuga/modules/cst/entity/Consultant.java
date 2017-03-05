@@ -32,6 +32,8 @@ public class Consultant extends DataEntity<Consultant> {
 	private Date createDate;
 	private String submitter;
 	private String bookUserId;
+	private String biddingLast;
+	private String totalBidding;
 
 	public Consultant() {
 		super();
@@ -39,6 +41,22 @@ public class Consultant extends DataEntity<Consultant> {
 
 	public Consultant(String id){
 		super(id);
+	}
+
+	public String getBiddingLast() {
+		return biddingLast;
+	}
+
+	public void setBiddingLast(String biddingLast) {
+		this.biddingLast = biddingLast;
+	}
+
+	public String getTotalBidding() {
+		return totalBidding;
+	}
+
+	public void setTotalBidding(String totalBidding) {
+		this.totalBidding = totalBidding;
 	}
 
 	public String getBookUserId() {

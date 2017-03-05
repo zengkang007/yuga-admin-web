@@ -18,9 +18,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/cst/consultant/">Consultant List</a></li>
-		<shiro:hasPermission name="cst:consultant:edit"><li><a href="${ctx}/cst/consultant/form">Post Consultant</a></li></shiro:hasPermission>
-	</ul>
+		<li class="active"><a href="${ctx}/cst/consultant/">Consultant List</a></li></ul>
 	<form:form id="searchForm" modelAttribute="consultant" action="${ctx}/cst/consultant/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
@@ -39,11 +37,6 @@
 			</li>
 			<li><label>Project Length：</label>
 				<form:input path="projectLength" htmlEscape="false" maxlength="11" class="input-medium"/>
-			</li>
-			<li><label>Start Date：</label>
-				<input name="startDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="<fmt:formatDate value="${consultant.startDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 			</li>
 			<li><label>Out Source：</label>
 				<form:select path="outSource" class="input-medium">
@@ -75,12 +68,12 @@
 				<th>Skill Level</th>
 				<th>Location City</th>
 				<th>Project Length</th>
-				<th>Start Date</th>
+				<th>Bids</th>
 				<th>Out Source</th>
 				<th>Delivery Mode</th>
 				<th>Govt Clearnce</th>
 				<th>Submitter</th>
-				<th>Create Time</th>
+				<th>Bid</th>
 				<th>Operate</th>
 			</tr>
 		</thead>
@@ -98,7 +91,7 @@
 					${consultant.projectLength}
 				</td>
 				<td>
-					<fmt:formatDate value="${consultant.startDate}" pattern="yyyy-MM-dd HH:mm"/>
+					${consultant.totalBidding}
 				</td>
 				<td>
 					${fns:getDictLabel(consultant.outSource, 'yg_cs_out_yesno', '')}
@@ -113,17 +106,17 @@
 						${fns:getUserById(consultant.submitter).name}
 				</td>
 				<td>
-					<fmt:formatDate value="${consultant.createDate}" pattern="yyyy-MM-dd HH:mm"/>
+					<a href="${ctx}/cst/bidding/bidConfirm?id=${consultant.id}">Place Bid</a>
 				</td>
 				<td>
-						<c:choose>
-							<c:when test="${consultant.isBook == 0}">
-								<a href="${ctx}//cst/consultant//bookConfirm?id=${consultant.id}">Book</a>
-							</c:when>
-							<c:otherwise>
-								Booked
-							</c:otherwise>
-						</c:choose>
+					<c:choose>
+						<c:when test="${consultant.isBook == 0}">
+							<a href="${ctx}/cst/consultant/bookConfirm?id=${consultant.id}">Book</a>
+						</c:when>
+						<c:otherwise>
+							Booked
+						</c:otherwise>
+					</c:choose>
 				</td>
 			</tr>
 		</c:forEach>

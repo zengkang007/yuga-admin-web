@@ -2,315 +2,258 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-
-<title>韩家墩小学数字化校园系统</title>
-<link href="${ctxStatic}/hjd/css/sc.css" rel="stylesheet" type="text/css" />
-<link href="${ctxStatic}/hjd/css/slide-2.css" rel="stylesheet" type="text/css"  />
-<script type="text/javascript" src="${ctxStatic}/hjd/js/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="${ctxStatic}/hjd/js/slide.js"></script>
-
+	<title>${fns:getConfig('productName')}</title>
+	<meta name="decorator" content="blank"/><c:set var="tabmode" value="${empty cookie.tabmode.value ? '1' : cookie.tabmode.value}"/>
+	<c:if test="${tabmode eq '1'}"><link rel="Stylesheet" href="${ctxStatic}/jerichotab/css/jquery.jerichotab.css" />
+		<script type="text/javascript" src="${ctxStatic}/jerichotab/js/jquery.jerichotab.js"></script></c:if>
 	<style type="text/css">
-      html,body,table{background-color:#3E75C0;width:100%;text-align:center;}
-      body{background:url(${ctxStatic}/hjd/img/b3.jpg) ;}
-    </style>
-
-
-
-<!--皮肤选择
-<script type="text/javascript">
-	//var cssPath = "${ctxStatic}/hjd/css/style_switch";
-	//var styleID=3;
-	//document.write('<link rel="stylesheet" type="text\/css" id="cssLink" href="'+cssPath+styleID+'.css" \/>');
-	//var cssLink=document.getElementById("cssLink");
-	//function styleChange(n) {
-	//	if(n==3){
-	//	document.getElementById("select").style.background="";
-	//	}
-	//	else{
-	//	document.getElementById("select").style.background="";
-	//	}
-	//	cssLink.href = cssPath+n+".css";			
-	//}
-	
-
-</script>
--->
-
+		#main {padding:0;margin:0;} #main .container-fluid{padding:0 4px 0 6px;}
+		#header {margin:0 0 8px;position:static;} #header li {font-size:14px;_font-size:12px;}
+		#header .brand {font-family:Helvetica, Georgia, Arial, sans-serif, 黑体;font-size:26px;padding-left:33px;}
+		#footer {margin:8px 0 0 0;padding:3px 0 0 0;font-size:11px;text-align:center;border-top:2px solid #0663A2;}
+		#footer, #footer a {color:#999;} #left{overflow-x:hidden;overflow-y:auto;} #left .collapse{position:static;}
+		#userControl>li>a{/*color:#fff;*/text-shadow:none;} #userControl>li>a:hover, #user #userControl>li.open>a{background:transparent;}
+	</style>
+	<script type="text/javascript">
+        $(document).ready(function() {
+            // <c:if test="${tabmode eq '1'}"> 初始化页签
+            $.fn.initJerichoTab({
+                renderTo: '#right', uniqueId: 'jerichotab',
+                contentCss: { 'height': $('#right').height() - tabTitleHeight },
+                tabs: [], loadOnce: true, tabWidth: 110, titleHeight: tabTitleHeight
+            });//</c:if>
+            // 绑定菜单单击事件
+            $("#menu a.menu").click(function(){
+                //   一级菜单焦点
+                $("#menu li.menu").removeClass("active");
+                $(this).parent().addClass("active");
+                // 左侧区域隐藏
+                if ($(this).attr("target") == "mainFrame"){
+                    $("#left,#openClose").hide();
+                    wSizeWidth();
+                    // <c:if test="${tabmode eq '1'}"> 隐藏页签
+                    $(".jericho_tab").hide();
+                    $("#mainFrame").show();//</c:if>
+                    return true;
+                }
+                // 左侧区域显示
+                $("#left,#openClose").show();
+                if(!$("#openClose").hasClass("close")){
+                    $("#openClose").click();
+                }
+                // 显示二级菜单
+                var menuId = "#menu-" + $(this).attr("data-id");
+                if ($(menuId).length > 0){
+                    $("#left .accordion").hide();
+                    $(menuId).show();
+                    // 初始化点击第一个二级菜单
+                    if (!$(menuId + " .accordion-body:first").hasClass('in')){
+                        $(menuId + " .accordion-heading:first a").click();
+                    }
+                    if (!$(menuId + " .accordion-body li:first ul:first").is(":visible")){
+                        $(menuId + " .accordion-body a:first i").click();
+                    }
+                    // 初始化点击第一个三级菜单
+                    $(menuId + " .accordion-body li:first li:first a:first i").click();
+                }else{
+                    // 获取二级菜单数据
+                    $.get($(this).attr("data-href"), function(data){
+                        if (data.indexOf("id=\"loginForm\"") != -1){
+                            alert('未登录或登录超时。请重新登录，谢谢！');
+                            top.location = "${ctx}";
+                            return false;
+                        }
+                        $("#left .accordion").hide();
+                        $("#left").append(data);
+                        // 链接去掉虚框
+                        $(menuId + " a").bind("focus",function() {
+                            if(this.blur) {this.blur()};
+                        });
+                        // 二级标题
+                        $(menuId + " .accordion-heading a").click(function(){
+                            $(menuId + " .accordion-toggle i").removeClass('icon-chevron-down').addClass('icon-chevron-right');
+                            if(!$($(this).attr('data-href')).hasClass('in')){
+                                $(this).children("i").removeClass('icon-chevron-right').addClass('icon-chevron-down');
+                            }
+                        });
+                        // 二级内容
+                        $(menuId + " .accordion-body a").click(function(){
+                            $(menuId + " li").removeClass("active");
+                            $(menuId + " li i").removeClass("icon-white");
+                            $(this).parent().addClass("active");
+                            $(this).children("i").addClass("icon-white");
+                        });
+                        // 展现三级
+                        $(menuId + " .accordion-inner a").click(function(){
+                            var href = $(this).attr("data-href");
+                            if($(href).length > 0){
+                                $(href).toggle().parent().toggle();
+                                return false;
+                            }
+                            // <c:if test="${tabmode eq '1'}"> 打开显示页签
+                            return addTab($(this)); // </c:if>
+                        });
+                        // 默认选中第一个菜单
+                        $(menuId + " .accordion-body a:first i").click();
+                        $(menuId + " .accordion-body li:first li:first a:first i").click();
+                    });
+                }
+                // 大小宽度调整
+                wSizeWidth();
+                return false;
+            });
+            // 初始化点击第一个一级菜单
+            $("#menu a.menu:first span").click();
+            // <c:if test="${tabmode eq '1'}"> 下拉菜单以选项卡方式打开
+            $("#userInfo .dropdown-menu a").mouseup(function(){
+                return addTab($(this), true);
+            });// </c:if>
+            // 鼠标移动到边界自动弹出左侧菜单
+            $("#openClose").mouseover(function(){
+                if($(this).hasClass("open")){
+                    $(this).click();
+                }
+            });
+            // 获取通知数目  <c:set var="oaNotifyRemindInterval" value="${fns:getConfig('oa.notify.remind.interval')}"/>
+            function getNotifyNum(){
+                $.get("${ctx}/oa/oaNotify/self/count?updateSession=0&t="+new Date().getTime(),function(data){
+                    var num = parseFloat(data);
+                    if (num > 0){
+                        $("#notifyNum,#notifyNum2").show().html("("+num+")");
+                    }else{
+                        $("#notifyNum,#notifyNum2").hide()
+                    }
+                });
+            }
+            getNotifyNum(); //<c:if test="${oaNotifyRemindInterval ne '' && oaNotifyRemindInterval ne '0'}">
+            setInterval(getNotifyNum, ${oaNotifyRemindInterval}); //</c:if>
+        });
+        // <c:if test="${tabmode eq '1'}"> 添加一个页签
+        function addTab($this, refresh){
+            $(".jericho_tab").show();
+            $("#mainFrame").hide();
+            $.fn.jerichoTab.addTab({
+                tabFirer: $this,
+                title: $this.text(),
+                closeable: true,
+                data: {
+                    dataType: 'iframe',
+                    dataLink: $this.attr('href')
+                }
+            }).loadData(refresh);
+            return false;
+        }// </c:if>
+	</script>
 </head>
-
-
 <body>
-<div id="index_all">
-  <div id="index_top"><span style="float:left; text-indent:0.5em;">欢迎${fns:getUser().name},使用韩家墩小学数字化校园系统！</span>
-    <div id="index_right">
-      <!--<div id="pic1"><img src="${ctxStatic}/hjd/img/a3.png" width="27" height="26" /><span title="点击换肤" onclick="mask1.style.visibility='visible';massage_box1.style.visibility='visible'" style="cursor:hand"><a href="#">换肤</a></span>
-        <div id="massage_box1">
-          <div class="massage1">
-            <div class="header1" onmousedown=MDown(massage_box1)>
-              <div style=" width:150px; height:26px; position:absolute">选择皮肤</div>
-              <span onclick="massage_box1.style.visibility='hidden'; mask1.style.visibility='hidden'" style="float:right; display:inline; cursor:pointer; background:url(${ctxStatic}/hjd/img/close1.png) no-repeat; width:34px; height:34px; margin-top:4px;"></span></div>
-            <div id="select" class="select"> <a href="javascript:styleChange(1);" class="m1"><img src="${ctxStatic}/hjd/img/main_03.jpg" width="62" height="62" /></a><a href="javascript:styleChange(2);" class="m2"><img src="${ctxStatic}/hjd/img/main_05.jpg" width="62" height="62" /></a><a href="javascript:styleChange(3);" class="m3"><img src="${ctxStatic}/hjd/img/main_07.jpg" width="62" height="62" /></a><a href="javascript:styleChange(4);" class="m4"><img src="${ctxStatic}/hjd/img/main_12.jpg" width="62" height="62" /></a><a href="javascript:styleChange(5);" class="m5"><img src="${ctxStatic}/hjd/img/main_13.jpg" width="62" height="62" /></a><a href="javascript:styleChange(6);" class="m6"><img src="${ctxStatic}/hjd/img/main_14.jpg" width="62" height="62" /></a><a href="javascript:styleChange(7);" class="m7"><img src="${ctxStatic}/hjd/img/main_18.jpg" width="62" height="62" /></a><a href="javascript:styleChange(8);" class="m8"><img src="${ctxStatic}/hjd/img/main_19.jpg" width="62" height="62" /></a><a href="javascript:styleChange(9);" class="m9"><img src="${ctxStatic}/hjd/img/main_20.jpg" width="62" height="62" /></a></div>
-          </div>
-        </div>
-        <div id="mask1"></div>
-      </div>-->
-      <div id="pic2"> <a href="${ctx}"><img src="${ctxStatic}/hjd/img/a2.png" width="30" height="30" />返回</a></div>
-      <div id="pic3"> <a href="${ctx}/logout"><img src="${ctxStatic}/hjd/img/a3.png" width="30" height="30" />退出</a></div>
-    </div>
-  </div>
-  <!--top结束-->
-  <div id="index_title">
-    
-    <!-- <div id="man">
-      <table width="137" border="0">
-        <tr>
-          <td width="68" height="68" style=" padding:0px;">
-          <div id="man_bor">
-          <img onclick="mask.style.visibility='visible';massage_box.style.visibility='visible'" title="点击查看个人详细信息" src="${ctxStatic}/hjd/img/man1.png" width="60" height="60" style="cursor:pointer;" />
-          </div>
-          </td>
-          <td><span title="点击查看个人详细信息" onclick="mask.style.visibility='visible';massage_box.style.visibility='visible'" style="cursor:hand"><a href="#">${fns:getUser().name}</a></span><br />
-            <div id="massage_box">
-              <div class="massage">
-                <div class="header" onmousedown=MDown(massage_box)>
-                  <div style=" width:150px; height:26px; position:absolute; text-align:center;">个人信息详情</div>
-                  <span onclick="massage_box.style.visibility='hidden'; mask.style.visibility='hidden'" style="float:right; display:inline; cursor:pointer; background:url(${ctxStatic}/hjd/img/close1.png) no-repeat; width:34px; height:34px; margin-top:4px; margin-right:3px;"></span></div>
-                <ul style="margin-right:25">
-                  <li>登录帐号：${fns:getUser().loginName}</li>
-                  <li>姓名：${fns:getUser().name}</li>
-                  <li>电话：${fns:getUser().phone}</li>
-                  <li>手机：${fns:getUser().mobile}</li>
-                  <li>姓名：${fns:getUser().email}</li>
-                  <li>部门：${fns:getUser().office}</li>
-
-                </ul>
-               <a onclick="Javascript:window.open('${ctx}/sys/user/info',700,570); massage_box.style.visibility='hidden'" style="float:right; margin-right:10px; cursor:pointer;">编辑</a> </div>
-                 </div>
-
-            <div id="mask"></div>
-            <a style="color:#FFFFFF;" href="${ctx}/logout">退出</a></td>
-        </tr>
-      </table>
-    </div>-->
-    <div id="tit_pic" style="margin-top: 0;" >
-	 <p   style="margin-top: 0; font-size:35px; font-family:Arial, Helvetica, sans-serif;color:#FFFFFF;height:60px; width:560px ;">韩家墩小学数字化校园系统</p>
-
-	</div>
-	
-	<!--  <div id="tianqi">
-	<a href="${ctx}">
-       <img src="${ctxStatic}/hjd/img/tq.png" width="65" height="60" />
-        <p style=" font-size:15px; font-family:Arial, Helvetica, sans-serif;color:#FFFFFF;height:15px;">首页</p>
-      </a>
-	</div>-->
-	
-
-  </div>
-  <!--标题结束   -->
-
-  
-  
-  <div id="main">
-		
-	<div id="right">
-		
-	<div class="ca1_slide">
-      <div id="slider-wrapper">
-        <div id="slider-bg">
-          <div id="slider-photos">
-            <div id="slides">
-              <div class="slides_container">
-                <div class="slide">
-                  <div id="icon_all">
-
-
-
-							
-                    <div id="p1">
-                    
-                    <c:forEach items="${fns:getMenuList()}" var="menu" varStatus="idxStatus">
-					<c:if test="${menu.parent.id eq '1'&&menu.isShow eq '1'}">
-                    <div id="s1y1" >
-                       <p   style=" font-size:18px; font-family:Arial, Helvetica, sans-serif;color:#FFFFFF;height:25px;line-height:25px;">${menu.name}</p>
-                      <div id="y1">
-                      <a  class="menu" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}"  data-id="${menu.id}">
-                      
-                      <c:if test="${menu.name eq '系统设置'}">
-                      <img src="${ctxStatic}/hjd/img/MGC.png" width="100" height="100" />
-                      </c:if>
-                      <c:if test="${menu.name eq '我的面板'}">
-                      <img src="${ctxStatic}/hjd/img/MDD.png" width="100" height="100" />
-                      </c:if>
-                      <c:if test="${menu.name eq '内容管理'}">
-                      <img src="${ctxStatic}/hjd/img/MXF.png" width="100" height="100" />
-                      </c:if>
-                      
-                      </a>  
-                      </div>
-                    </div>
-							</c:if>
-						</c:forEach>
-					  	
-					  </div>							
-
-                    <div id="p2">
-                     
-                    <c:forEach items="${fns:getMenuList()}" var="menu" varStatus="idxStatus">
-					<c:if test="${menu.parent.id eq '1'&&menu.isShow eq '1'}">
-					<div id="menu-${menu.id}"  class="accordion">
-                       <p   style=" font-size:25px; font-family:Arial, Helvetica, sans-serif;color:#FFFFFF;height:25px;line-height:25px;">${menu.name}</p>
-
-					<c:forEach items="${menuList}" var="menu2">
-					<c:if test="${menu2.parent.id eq menu.id&&menu2.isShow eq '1'}">
-					
-					<div id="s1y1" >
-
-                       <p   style=" font-size:18px; font-family:Arial, Helvetica, sans-serif;color:#FFFFFF;height:25px;line-height:25px;">${menu2.name}</p>
-                       <c:forEach items="${menuList}" var="menu3"><c:if test="${menu3.parent.id eq menu2.id&&menu3.isShow eq '1'}">
-                      <div id="y1"  class="y1">
-                      
-                  <a  href="${fn:indexOf(menu3.href, '://') eq -1 ? ctx : ''}${not empty menu3.href ? menu3.href : '/404'}"  target="${not empty menu3.target ? menu3.target : '_blank'}">
-
-
-                      <c:if test="${menu3.name eq '巡查管理'}">
-                      <img src="${ctxStatic}/hjd/img/MYC.png" width="60" height="60" />
-                      </c:if>
-
-                      <c:if test="${menu3.name eq '班级管理'}">
-                      <img src="${ctxStatic}/hjd/img/MXD.png" width="60" height="60" />
-                      </c:if>
-
-                      <c:if test="${menu3.name eq '课程管理'}">
-                      <img src="${ctxStatic}/hjd/img/MXB.png" width="60" height="60" />
-                      </c:if>
-                      
-                      <c:if test="${menu3.name eq '课时维护'}">
-                      <img src="${ctxStatic}/hjd/img/MXF.png" width="60" height="60" />
-                      </c:if>
-                      
-                      <c:if test="${menu3.name eq '教师信息维护'}">
-                      <img src="${ctxStatic}/hjd/img/MXH.png" width="60" height="60" />
-                      </c:if>                      
-                      <c:if test="${menu3.name eq '学生信息维护'}">
-                      <img src="${ctxStatic}/hjd/img/MXI.png" width="60" height="60" />
-                      </c:if>                      
-                      <c:if test="${menu3.name eq '基本课表'}">
-                      <img src="${ctxStatic}/hjd/img/MXE.png" width="60" height="60" />
-                      </c:if>                      
-                      <c:if test="${menu3.name eq '修改密码'}">
-                      <img src="${ctxStatic}/hjd/img/MGA.png" width="60" height="60" />
-                      </c:if> 
-
-
-
-                      <c:if test="${menu3.name eq '用户管理'}">
-                      <img src="${ctxStatic}/hjd/img/MJA.png" width="60" height="60" />
-                      </c:if>
-
-                      <c:if test="${menu3.name eq '机构管理'}">
-                      <img src="${ctxStatic}/hjd/img/MJB.png" width="60" height="60" />
-                      </c:if>
-
-                      <c:if test="${menu3.name eq '区域管理'}">
-                      <img src="${ctxStatic}/hjd/img/MJC.png" width="60" height="60" />
-                      </c:if>
-                      
-                      <c:if test="${menu3.name eq '菜单管理'}">
-                      <img src="${ctxStatic}/hjd/img/MJD.png" width="60" height="60" />
-                      </c:if>
-                      
-                      <c:if test="${menu3.name eq '字典管理'}">
-                      <img src="${ctxStatic}/hjd/img/MJF.png" width="60" height="60" />
-                      </c:if>                      
-                      <c:if test="${menu3.name eq '角色管理'}">
-                      <img src="${ctxStatic}/hjd/img/MJG.png" width="60" height="60" />
-                      </c:if>                      
-                      <c:if test="${menu3.name eq '日志查询'}">
-                      <img src="${ctxStatic}/hjd/img/MJD.png" width="60" height="60" />
-                      </c:if>                      
-                      <c:if test="${menu3.name eq '连接池监视'}">
-                      <img src="${ctxStatic}/hjd/img/MJA.png" width="60" height="60" />
-                      </c:if> 
-                                                                                       
-
-                        <br>${menu3.name}</a> 
-                      </div>   
-                         </c:if></c:forEach>                                                                                              
-                       
-                    </div>
-
-					</c:if>
-					</c:forEach>
-					
-					</div>
-					
-							</c:if>
-						</c:forEach>
-				
-                 
+<div id="main">
+	<div id="header" class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="brand"><span id="productName">${fns:getConfig('productName')}</span></div>
+			<ul id="userControl" class="nav pull-right">
+				<li><a href="${pageContext.request.contextPath}${fns:getFrontPath()}/index-${fnc:getCurrentSiteId()}.html" target="_blank" title="Home page"><i class="icon-home"></i></a></li>
+				<li id="themeSwitch" class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Theme switch"><i class="icon-th-large"></i></a>
+					<ul class="dropdown-menu">
+						<c:forEach items="${fns:getDictList('theme')}" var="dict"><li><a href="#" onclick="location='${pageContext.request.contextPath}/theme/${dict.value}?url='+location.href">${dict.label}</a></li></c:forEach>
+						<li><a href="javascript:cookie('tabmode','${tabmode eq '1' ? '0' : '1'}');location=location.href">${tabmode eq '1' ? 'Close' : 'Open'}Tab mode</a></li>
+					</ul>
+					<!--[if lte IE 6]><script type="text/javascript">$('#themeSwitch').hide();</script><![endif]-->
+				</li>
+				<li id="userInfo" class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Profile">Hello, ${fns:getUser().name}&nbsp;<span id="notifyNum" class="label label-info hide"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="${ctx}/sys/user/info" target="mainFrame"><i class="icon-user"></i>&nbsp; Personal info</a></li>
+						<li><a href="${ctx}/sys/user/modifyPwd" target="mainFrame"><i class="icon-lock"></i>&nbsp;  Edit Password</a></li>
+						<li><a href="${ctx}/oa/oaNotify/self" target="mainFrame"><i class="icon-bell"></i>&nbsp;  Notify <span id="notifyNum2" class="label label-info hide"></span></a></li>
+					</ul>
+				</li>
+				<li><a href="${ctx}/logout" title="Logout">Logout</a></li>
+				<li>&nbsp;</li>
+			</ul>
+			<%-- <c:if test="${cookie.theme.value eq 'cerulean'}">
+                <div id="user" style="position:absolute;top:0;right:0;"></div>
+                <div id="logo" style="background:url(${ctxStatic}/images/logo_bg.jpg) right repeat-x;width:100%;">
+                    <div style="background:url(${ctxStatic}/images/logo.jpg) left no-repeat;width:100%;height:70px;"></div>
                 </div>
-
-
-                  </div>
-                </div>
-
-              </div>
-          </div>
-        </div>
-      </div>
-    </div>
-				
-				<!--  <iframe id="mainFrame" name="mainFrame" src="" style="" scrolling="yes" frameborder="no" width="980px" height="600px" ></iframe>-->
-	
+                <script type="text/javascript">
+                    $("#productName").hide();$("#user").html($("#userControl"));$("#header").prepend($("#user, #logo"));
+                </script>
+            </c:if> --%>
+			<div class="nav-collapse">
+				<ul id="menu" class="nav" style="*white-space:nowrap;float:none;">
+					<c:set var="firstMenu" value="true"/>
+					<c:forEach items="${fns:getMenuList()}" var="menu" varStatus="idxStatus">
+						<c:if test="${menu.parent.id eq '1'&&menu.isShow eq '1'}">
+							<li class="menu ${not empty firstMenu && firstMenu ? ' active' : ''}">
+								<c:if test="${empty menu.href}">
+									<a class="menu" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}"><span>${menu.name}</span></a>
+								</c:if>
+								<c:if test="${not empty menu.href}">
+									<a class="menu" href="${fn:indexOf(menu.href, '://') eq -1 ? ctx : ''}${menu.href}" data-id="${menu.id}" target="mainFrame"><span>${menu.name}</span></a>
+								</c:if>
+							</li>
+							<c:if test="${firstMenu}">
+								<c:set var="firstMenuId" value="${menu.id}"/>
+							</c:if>
+							<c:set var="firstMenu" value="false"/>
+						</c:if>
+					</c:forEach><%--
+						<shiro:hasPermission name="cms:site:select">
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">${fnc:getSite(fnc:getCurrentSiteId()).name}<b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<c:forEach items="${fnc:getSiteList()}" var="site"><li><a href="${ctx}/cms/site/select?id=${site.id}&flag=1">${site.name}</a></li></c:forEach>
+							</ul>
+						</li>
+						</shiro:hasPermission> --%>
+				</ul>
+			</div><!--/.nav-collapse -->
+		</div>
 	</div>
-
+	<div class="container-fluid">
+		<div id="content" class="row-fluid">
+			<div id="left"><%--
+					<iframe id="menuFrame" name="menuFrame" src="" style="overflow:visible;" scrolling="yes" frameborder="no" width="100%" height="650"></iframe> --%>
+			</div>
+			<div id="openClose" class="close">&nbsp;</div>
+			<div id="right">
+				<iframe id="mainFrame" name="mainFrame" src="" style="overflow:visible;" scrolling="yes" frameborder="no" width="100%" height="650"></iframe>
+			</div>
+		</div>
+		<div id="footer" class="row-fluid">
+			Copyright &copy; 2012-${fns:getConfig('copyrightYear')} ${fns:getConfig('productName')} - Powered By <a href="http://yuga.com" target="_blank">yuga</a> ${fns:getConfig('version')}
+		</div>
+	</div>
 </div>
-
-</div>
-
-
-	 <script type="text/javascript">
-		$(document).ready(function() {
-			var menuId = "";
-			$("#right .accordion").hide();
-			
-			// 绑定菜单单击事件
-			$("#p1  a.menu").click(function(){
-
-				menuId = "#menu-" + $(this).attr("data-id");
-				$("#p1").hide();
-				$(menuId).show();
-			});
-
-			// 绑定菜单单击事件   
-			//$("#p2 .y1").click(function(){
-
-			//	$("#slider-wrapper").hide();
-				//$("#mainFrame").css("height","500px");
-			//});	
-
-
-			// 绑定返回事件   
-			//$("#pic2").click(function(){
-
-			//	if(!$("#slider-wrapper").is(':hidden')){//如果详细页面不隐藏,则返回二级菜单页
-			//		$("#slider-wrapper").hide();                     
-			//		$("#p1").show();
-
-            //     }
-
-				
-			//	if(!$("#mainFrame").is(':hidden')){//如果详细页面不隐藏,则返回二级菜单页
-			//	    $("#mainFrame").hide();
-			//		$("#slider-wrapper").show();
-            //     }
-
-			//});				
-			
-		});
-
-	</script> 
-  <div id="footerwarp">@copyright 2016  韩家墩小学数字化校园系统版权所有，  建议使用IE7及以上浏览器，1024*768分辨率！</div>
-</div>
+<script type="text/javascript">
+    var leftWidth = 160; // 左侧窗口大小
+    var tabTitleHeight = 33; // 页签的高度
+    var htmlObj = $("html"), mainObj = $("#main");
+    var headerObj = $("#header"), footerObj = $("#footer");
+    var frameObj = $("#left, #openClose, #right, #right iframe");
+    function wSize(){
+        var minHeight = 500, minWidth = 980;
+        var strs = getWindowSize().toString().split(",");
+        htmlObj.css({"overflow-x":strs[1] < minWidth ? "auto" : "hidden", "overflow-y":strs[0] < minHeight ? "auto" : "hidden"});
+        mainObj.css("width",strs[1] < minWidth ? minWidth - 10 : "auto");
+        frameObj.height((strs[0] < minHeight ? minHeight : strs[0]) - headerObj.height() - footerObj.height() - (strs[1] < minWidth ? 42 : 28));
+        $("#openClose").height($("#openClose").height() - 5);// <c:if test="${tabmode eq '1'}">
+        $(".jericho_tab iframe").height($("#right").height() - tabTitleHeight); // </c:if>
+        wSizeWidth();
+    }
+    function wSizeWidth(){
+        if (!$("#openClose").is(":hidden")){
+            var leftWidth = ($("#left").width() < 0 ? 0 : $("#left").width());
+            $("#right").width($("#content").width()- leftWidth - $("#openClose").width() -5);
+        }else{
+            $("#right").width("100%");
+        }
+    }// <c:if test="${tabmode eq '1'}">
+    function openCloseClickCallBack(b){
+        $.fn.jerichoTab.resize();
+    } // </c:if>
+</script>
+<script src="${ctxStatic}/common/wsize.min.js" type="text/javascript"></script>
 </body>
 </html>

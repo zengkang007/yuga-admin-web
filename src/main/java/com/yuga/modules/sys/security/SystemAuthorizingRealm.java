@@ -69,7 +69,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 			Session session = UserUtils.getSession();
 			String code = (String)session.getAttribute(ValidateCodeServlet.VALIDATE_CODE);
 			if (token.getCaptcha() == null || !token.getCaptcha().toUpperCase().equals(code)){
-				throw new AuthenticationException("msg:验证码错误, 请重试.");
+				throw new AuthenticationException("msg:error verify code.");
 			}
 		}
 		
@@ -77,7 +77,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 		User user = getSystemService().getUserByLoginName(token.getUsername());
 		if (user != null) {
 			if (Global.NO.equals(user.getLoginFlag())){
-				throw new AuthenticationException("msg:该已帐号禁止登录.");
+				throw new AuthenticationException("msg:forbidden.");
 			}
 			byte[] salt = Encodes.decodeHex(user.getPassword().substring(0,16));
 			return new SimpleAuthenticationInfo(new Principal(user, token.isMobileLogin()), 
@@ -106,7 +106,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 				// 记住我进来的，并且当前用户已登录，则退出当前用户提示信息。
 				else{
 					UserUtils.getSubject().logout();
-					throw new AuthenticationException("msg:账号已在其它地方登录，请重新登录。");
+					throw new AuthenticationException("msg:had login。");
 				}
 			}
 		}

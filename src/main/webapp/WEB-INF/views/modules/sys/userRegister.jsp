@@ -7,40 +7,52 @@
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			$("#no").focus();
-			$("#inputForm").validate({
-				rules: {
-					loginName: {remote: "${ctx}/sys/user/checkLoginName?oldLoginName=" + encodeURIComponent('${user.loginName}')}
-				},
-				messages: {
-					loginName: {remote: "用户登录名已存在"},
-					confirmNewPassword: {equalTo: "输入与上面相同的密码"}
-				},
-				submitHandler: function(form){
-				    debugger;
-					loading('正在提交，请稍等...');
-					alert('xx')
-					form.submit();
-				},
-				errorContainer: "#messageBox",
-				errorPlacement: function(error, element) {
-					$("#messageBox").text("输入有误，请先更正。");
-					if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
-						error.appendTo(element.parent().parent());
-					} else {
-						error.insertAfter(element);
-					}
-				}
+		    $('#btnSubmit').click(function(){
+                $("#inputForm").submit();
+                setOfficeId();
 			});
+
+			<%--$("#inputForm").validate({--%>
+				<%--rules: {--%>
+					<%--loginName: {remote: "${ctx}/sys/user/checkLoginName?oldLoginName=" + encodeURIComponent('${user.loginName}')}--%>
+				<%--},--%>
+				<%--messages: {--%>
+					<%--loginName: {remote: "用户登录名已存在"},--%>
+					<%--confirmNewPassword: {equalTo: "输入与上面相同的密码"}--%>
+				<%--},--%>
+				<%--submitHandler: function(form){--%>
+				    <%--debugger;--%>
+					<%--loading('正在提交，请稍等...');--%>
+					<%--alert('xx')--%>
+					<%--form.submit();--%>
+				<%--},--%>
+				<%--errorContainer: "#messageBox",--%>
+				<%--errorPlacement: function(error, element) {--%>
+					<%--$("#messageBox").text("输入有误，请先更正。");--%>
+					<%--if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){--%>
+						<%--error.appendTo(element.parent().parent());--%>
+					<%--} else {--%>
+						<%--error.insertAfter(element);--%>
+					<%--}--%>
+				<%--}--%>
+//			});
 		});
+
+		function setOfficeId() {
+            document.getElementById('office.id').value = document.getElementById('company.id').value;
+        }
+		function onChangeOfficeId(){
+            setOfficeId();
+		}
 	</script>
 </head>
 <body>
 	<ul class="nav nav-tabs">
 
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="user" action="${ctx}/sys/user/save" method="post" class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="user" action="/b/register" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
+		<form:hidden path="office.id"/>
 		<sys:message content="${message}"/>
 		<div class="control-group">
 			<label class="control-label">Name:</label>
@@ -73,6 +85,32 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label">Role:</label>
+			<div class="controls">
+				<form:select path="roleIdList" class="input-xlarge">
+					<form:option value="-1" label="Choose"/>
+					<form:options items="${fns:getRegisterRoleList()}" itemLabel="name" itemValue="id" htmlEscape="false"/>
+				</form:select>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">Company:</label>
+			<div class="controls">
+				<form:select path="company.id" onchange="onChangeOfficeId()" class="input-xlarge">
+					<form:options items="${fns:getRegisterOfficeList()}" itemLabel="name" itemValue="id" htmlEscape="false"/>
+				</form:select>
+			</div>
+		</div>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">Department:</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:select path="office.id" class="input-xlarge">--%>
+					<%--<form:option value="-1" label="Choose"/>--%>
+					<%--<form:options items="${fns:getOfficeList()}" itemLabel="name" itemValue="id" htmlEscape="false"/>--%>
+				<%--</form:select>--%>
+			<%--</div>--%>
+		<%--</div>--%>
+		<div class="control-group">
 			<label class="control-label">Email:</label>
 			<div class="controls">
 				<form:input path="email" htmlEscape="false" maxlength="100" class="email"/>
@@ -88,15 +126,6 @@
 			<label class="control-label">Mobile:</label>
 			<div class="controls">
 				<form:input path="mobile" htmlEscape="false" maxlength="100"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">User Type:</label>
-			<div class="controls">
-				<form:select path="userType" class="input-xlarge">
-					<form:option value="" label="Choose"/>
-					<form:options items="${fns:getDictList('yg_company_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
 			</div>
 		</div>
 		<div class="control-group">
@@ -120,7 +149,7 @@
 			</div>
 		</c:if>
 		<div class="form-actions">
-			<input id="btnSubmit" class="btn btn-primary" type="submit" value="Save"/>&nbsp;
+			<input id="btnSubmit" class="btn btn-primary" type="submit" value="Registe"/>&nbsp;
 			<input id="btnCancel" class="btn" type="button" value="Return" onclick="history.go(-1)"/>
 		</div>
 	</form:form>

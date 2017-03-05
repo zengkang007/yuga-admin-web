@@ -16,9 +16,17 @@
 		a.submitter AS "submitter",
 		a.is_book AS "isBook",
 		a.create_date AS "createDate",
-	  	a.book_user_id AS "bookUserId"
+	  	a.book_user_id AS "bookUserId",
+	  	TIMESTAMPDIFF(SECOND, now(), a.bid_valid_end ) AS "biddingLast",
+		b.total_bidding AS "totalBidding"
 	</sql>
 	<sql id="consultantJoins">
+		LEFT JOIN (
+			select count(id) total_bidding, consultant_id
+		   		from yg_bidding
+		   		group by consultant_id)
+		   	as b
+		on b.consultant_id = a.id;
 	</sql>
     
 	<select id="get" resultType="Consultant">
@@ -33,7 +41,15 @@
 		SELECT 
 			<include refid="consultantColumns"/>
 		FROM yg_consultant a
-		<include refid="consultantJoins"/>
+		<!--<include refid="consultantJoins"/>-->
+		LEFT JOIN (
+			select count(id) total_bidding, consultant_id
+			from yg_bidding
+			group by consultant_id
+		)
+		as b
+		on b.consultant_id = a.id
+
 		<where>
 			
 			<if test="skillLevel != null and skillLevel != ''">

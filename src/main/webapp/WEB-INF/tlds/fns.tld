@@ -10,128 +10,6 @@
 	<short-name>fns</short-name>
 	<uri>http://java.sun.com/jsp/jstl/functionss</uri>
 
-	<!-- 	自定义信息 -->
-	<function>
-		<description>获取基础课表</description>
-		<name>getBaseCourseList</name>
-		<function-class>com.yuga.modules.school.utils.SchoolUtil</function-class>
-		<function-signature>java.util.List getBaseCourseList()</function-signature>
-		<example>${fns:getBaseCourseList()}</example>
-	</function>
-	<function>
-		<description>获取基础课表自Label</description>
-		<name>getBaseCourseLabel</name>
-		<function-class>com.yuga.modules.school.utils.SchoolUtil</function-class>
-		<function-signature>java.util.List getBaseCourseLabel(java.lang.String)</function-signature>
-		<example>${fns:getBaseCourseLabel(id)}</example>
-	</function>
-	
-	<function>
-		<description>获取教师信息</description>
-		<name>getTeacherList</name>
-		<function-class>com.yuga.modules.school.utils.SchoolUtil</function-class>
-		<function-signature>java.util.List getTeacherList()</function-signature>
-		<example>${fns:getTeacherList()}</example>
-	</function>
-	<function>
-		<description>获取年级级别</description>
-		<name>getGradeList</name>
-		<function-class>com.yuga.modules.school.utils.SchoolUtil</function-class>
-		<function-signature>java.util.List getGradeList()</function-signature>
-		<example>${fns:getGradeList()}</example>
-	</function>
-	<function>
-		<description>获取年级级别Label</description>
-		<name>getGradeLabel</name>
-		<function-class>com.yuga.modules.school.utils.SchoolUtil</function-class>
-		<function-signature>java.util.List getGradeLabel(java.lang.String)</function-signature>
-		<example>${fns:getGradeLabel(id)}</example>
-	</function>
-	<function>
-		<description>获取课程</description>
-		<name>getYgCourseList</name>
-		<function-class>com.yuga.modules.school.utils.SchoolUtil</function-class>
-		<function-signature>java.util.List getYgCourseList()</function-signature>
-		<example>${fns:getYgCourseList()}</example>
-	</function>
-	<function>
-		<description>获取课程Label</description>
-		<name>getYgCourseListLabel</name>
-		<function-class>com.yuga.modules.school.utils.SchoolUtil</function-class>
-		<function-signature>java.util.List getYgCourseLabel(java.lang.String)</function-signature>
-		<example>${fns:getYgCourseLabel(id)}</example>
-	</function>
-	<function>
-		<description>获取课时安排</description>
-		<name>getYgCourseTimeList</name>
-		<function-class>com.yuga.modules.school.utils.SchoolUtil</function-class>
-		<function-signature>java.util.List getYgCourseTimeList()</function-signature>
-		<example>${fns:getYgCourseTimeList()}</example>
-	</function>
-	<function>
-		<description>获取课时安排Label</description>
-		<name>getYgCourseTimeListLabel</name>
-		<function-class>com.yuga.modules.school.utils.SchoolUtil</function-class>
-		<function-signature>java.util.List getYgCourseTimeListLabel(java.lang.String)</function-signature>
-		<example>${fns:getYgCourseTimeListLabel(id)}</example>
-	</function>
-	<function>
-		<description>获取班级信息</description>
-		<name>getYgClassList</name>
-		<function-class>com.yuga.modules.school.utils.SchoolUtil</function-class>
-		<function-signature>java.util.List getYgClassList()</function-signature>
-		<example>${fns:getYgClassList()}</example>
-	</function>
-	<function>
-		<description>获取班级信息Label</description>
-		<name>getYgClassLabel</name>
-		<function-class>com.yuga.modules.school.utils.SchoolUtil</function-class>
-		<function-signature>java.util.List getYgClassLabel(java.lang.String)</function-signature>
-		<example>${fns:getYgClassLabel(id)}</example>
-	</function>
-	<function>
-		<description>获取多媒体使用情况</description>
-		<name>getMultiStatusList</name>
-		<function-class>com.yuga.modules.school.utils.SchoolUtil</function-class>
-		<function-signature>java.util.List getMultiStatusList()</function-signature>
-		<example>${fns:getMultiStatusList()}</example>
-	</function>
-	<function>
-		<description>获取多媒体使用情况Label</description>
-		<name>getMultiStatusListLabel</name>
-		<function-class>com.yuga.modules.school.utils.SchoolUtil</function-class>
-		<function-signature>java.util.List getMultiStatusListLabel(java.lang.String)</function-signature>
-		<example>${fns:getMultiStatusListLabel(id)}</example>
-	</function>
-	<function>
-		<description>获取教师教学情况</description>
-		<name>getTeacherStatusList</name>
-		<function-class>com.yuga.modules.school.utils.SchoolUtil</function-class>
-		<function-signature>java.util.List getTeacherStatusList()</function-signature>
-		<example>${fns:getTeacherStatusList()}</example>
-	</function>
-		<function>
-		<description>获取教师教学情况Label</description>
-		<name>getTeacherStatusListLabel</name>
-		<function-class>com.yuga.modules.school.utils.SchoolUtil</function-class>
-		<function-signature>java.util.List getTeacherStatusListLabel(java.lang.String)</function-signature>
-		<example>${fns:getTeacherStatusListLabel(id)}</example>
-	</function>
-	<function>
-		<description>获取学生学习情况</description>
-		<name>getStudentStatusList</name>
-		<function-class>com.yuga.modules.school.utils.SchoolUtil</function-class>
-		<function-signature>java.util.List getStudentStatusList()</function-signature>
-		<example>${fns:getStudentStatusList()}</example>
-	</function>
-		<function>
-		<description>获取学生学习情况Label</description>
-		<name>getStudentStatusListLabel</name>
-		<function-class>com.yuga.modules.school.utils.SchoolUtil</function-class>
-		<function-signature>java.util.List getStudentStatusListLabel(java.lang.String)</function-signature>
-		<example>${fns:getStudentStatusListLabel(id)}</example>
-	</function>
-
 	<!-- 自定义结束 -->	
 	<function>
 		<description>获取管理路径</description>
@@ -223,6 +101,21 @@
 		<function-class>com.yuga.modules.sys.utils.UserUtils</function-class>
 		<function-signature>java.util.List getAreaList()</function-signature>
 		<example>${fns:getAreaList()}</example>
+	</function>
+
+	<function>
+		<description>获取默认注册角色列表</description>
+		<name>getRegisterRoleList</name>
+		<function-class>com.yuga.modules.sys.utils.UserUtils</function-class>
+		<function-signature>java.util.List getRegisterRoleList()</function-signature>
+		<example>${fns:getRegisterRoleList()}</example>
+	</function>
+	<function>
+		<description>获取默认注册部门对象列表</description>
+		<name>getRegisterOfficeList</name>
+		<function-class>com.yuga.modules.sys.utils.UserUtils</function-class>
+		<function-signature>java.util.List getRegisterOfficeList()</function-signature>
+		<example>${fns:getRegisterOfficeList()}</example>
 	</function>
 
 	<function>

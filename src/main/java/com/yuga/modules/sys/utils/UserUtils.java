@@ -3,8 +3,13 @@
  */
 package com.yuga.modules.sys.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.yuga.common.config.Global;
+import com.yuga.common.utils.StringUtils;
+import com.yuga.common.utils.excel.ExportExcel;
+import org.apache.commons.collections.ListUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.session.InvalidSessionException;
@@ -25,6 +30,8 @@ import com.yuga.modules.sys.entity.Office;
 import com.yuga.modules.sys.entity.Role;
 import com.yuga.modules.sys.entity.User;
 import com.yuga.modules.sys.security.SystemAuthorizingRealm.Principal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 用户工具类
@@ -32,6 +39,7 @@ import com.yuga.modules.sys.security.SystemAuthorizingRealm.Principal;
  * @version 2013-12-05
  */
 public class UserUtils {
+	private static Logger log = LoggerFactory.getLogger(UserUtils.class);
 
 	private static UserDao userDao = SpringContextHolder.getBean(UserDao.class);
 	private static RoleDao roleDao = SpringContextHolder.getBean(RoleDao.class);
@@ -156,7 +164,7 @@ public class UserUtils {
 	public static List<Role> getRoleList(){
 		@SuppressWarnings("unchecked")
 		List<Role> roleList = (List<Role>)getCache(CACHE_ROLE_LIST);
-		if (roleList == null){
+		if (roleList == null || roleList.size() == 0){
 			User user = getUser();
 			if (user.isAdmin()){
 				roleList = roleDao.findAllList(new Role());
@@ -238,7 +246,59 @@ public class UserUtils {
 		}
 		return officeList;
 	}
-	
+
+	/**
+	 * 获取当前注册部门
+	 * 从配置文件中获取需要显示部门的ids
+	 * @return
+	 */
+	public static List<Office> getRegisterOfficeList(){
+		String strOffice = Global.getConfig("register.office.ids");
+		List<Office> officeList = null;
+		List<Office> outList = new ArrayList<>();
+		if(StringUtils.isNotEmpty(strOffice)){
+			officeList = officeDao.findAllList(new Office());
+			String[] officeIds = strOffice.split(",");
+			for (String id : officeIds) {
+				for(Office office : officeList) {
+					if(id.equals(office.getId())) {
+						outList.add(office);
+					}
+				}
+			}
+
+		} else {
+			log.error("No default office ids.");
+		}
+		return outList;
+	}
+
+	/**
+	 * 获取当前注册可用的角色
+	 * 从配置文件中获取需要显示角色的ids
+	 * @return
+	 */
+	public static List<Role> getRegisterRoleList(){
+		String strRole = Global.getConfig("register.role.ids");
+		List<Role> roleList = null;
+		List<Role> outList = new ArrayList<>();
+		if(StringUtils.isNotEmpty(strRole)){
+			roleList = roleDao.findAllList(new Role());
+			String[] roleIds = strRole.split(",");
+			for (String id : roleIds) {
+				for(Role role : roleList) {
+					if(id.equals(role.getId())) {
+						outList.add(role);
+					}
+				}
+			}
+
+		} else {
+			log.error("No default role ids.");
+		}
+		return outList;
+	}
+
 	/**
 	 * 获取授权主要对象
 	 */

@@ -76,19 +76,6 @@ public class LoginController extends BaseController{
 		return "modules/sys/sysLogin";
 	}
 
-	@RequestMapping(value = "/b/signup", method = RequestMethod.GET)
-	public String signup(User user, Model model) {
-		if (user.getCompany()==null || user.getCompany().getId()==null){
-			user.setCompany(UserUtils.getUser().getCompany());
-		}
-		if (user.getOffice()==null || user.getOffice().getId()==null){
-			user.setOffice(UserUtils.getUser().getOffice());
-		}
-		model.addAttribute("user", user);
-		model.addAttribute("allRoles", systemService.findAllRole());
-		return "modules/sys/userRegister";
-	}
-
 	/**
 	 * 鐧诲綍澶辫触锛岀湡姝ｇ櫥褰曠殑POST璇锋眰鐢盕ilter瀹屾垚
 	 */
@@ -194,7 +181,7 @@ public class LoginController extends BaseController{
 //		System.out.println("==========================b");
 //		return "modules/sys/sysIndex";
 		
-		return "modules/sys/sysIndex1023bak";
+		return "modules/sys/sysIndex";
 	}
 	
 	/**

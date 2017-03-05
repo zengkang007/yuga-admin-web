@@ -41,10 +41,10 @@
 			$(window).resize();
 		});
 		// 如果在框架或在对话框中，则弹出提示并跳转到首页
-		if(self.frameElement && self.frameElement.tagName == "IFRAME" || $('#left').length > 0 || $('.jbox').length > 0){
-			alert('Timeout, plase relogin. ');
-			top.location = "${ctx}";
-		}
+		<%--if(self.frameElement && self.frameElement.tagName == "IFRAME" || $('#left').length > 0 || $('.jbox').length > 0){--%>
+			<%--alert('Timeout, plase relogin.... ');--%>
+			<%--top.location = "${ctx}";--%>
+		<%--}--%>
 		$(window).resize(function(){
 			$('body').height($(window).height());
 			var top = $('body').height() / 2 - $('.form-signin').height() / 2 - 39;
