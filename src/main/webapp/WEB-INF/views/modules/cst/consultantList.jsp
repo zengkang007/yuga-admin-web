@@ -69,10 +69,9 @@
 				<th>Location City</th>
 				<th>Project Length</th>
 				<th>Bids</th>
-				<th>Current Bid</th>
 				<th>Out Source</th>
 				<th>Delivery Mode</th>
-				<th>Govt Clearnce</th>
+				<th>Submit Date</th>
 				<th>Submitter</th>
 				<th>Bid</th>
 				<th>Operate</th>
@@ -95,16 +94,13 @@
 					${consultant.totalBidding}
 				</td>
 				<td>
-					${consultant.currentBid}
-				</td>
-				<td>
 					${fns:getDictLabel(consultant.outSource, 'yg_cs_out_yesno', '')}
 				</td>
 				<td>
 					${fns:getDictLabel(consultant.deliveryMode, 'yg_cs_delivery_mode', '')}
 				</td>
 				<td>
-					${fns:getDictLabel(consultant.govtClearnce, 'yg_cs_yesno', '')}
+					<fmt:formatDate value="${consultant.createDate}" pattern="yyyy-MM-dd HH:mm"/>
 				</td>
 				<td>
 						${fns:getUserById(consultant.submitter).name}

@@ -16,10 +16,10 @@ public class ConsultantUtil {
 
     private static ConsultantDao consultantDao = SpringContextHolder.getBean(ConsultantDao.class);
 
-    public static final String CONSULTANT_CACHE = "userCache";
-    public static final String CONSULTANT_CACHE_ID_ = "id_";
+    public static final String CONSULTANT_CACHE = "userConsultantCache";
+    public static final String CONSULTANT_CACHE_ID_ = "consultant_id_";
     public static final String CONSULTANT_CACHE_LOGIN_NAME_ = "ln";
-    public static final String CONSULTANT_CACHE_LIST_BY_OFFICE_ID_ = "oid_";
+    public static final String CONSULTANT_CACHE_LIST_BY_OFFICE_ID_ = "consultant_oid_";
 
     /**
      * 根据ID获取用户

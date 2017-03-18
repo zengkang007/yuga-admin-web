@@ -6,6 +6,8 @@ package com.yuga.modules.cst.entity;
 import com.yuga.modules.cst.registries.BookConst;
 import com.yuga.modules.cst.registries.FormStatusConst;
 import org.hibernate.validator.constraints.Length;
+
+import java.math.BigDecimal;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -33,6 +35,7 @@ public class Consultant extends DataEntity<Consultant> {
 	private Date createDate;
 	private String submitter;
 	private String bookUserId;
+	private BigDecimal baseGrade;
 	private String biddingLast;
 	private String totalBidding;
 	private String currentBid;
@@ -43,6 +46,14 @@ public class Consultant extends DataEntity<Consultant> {
 
 	public Consultant(String id){
 		super(id);
+	}
+
+	public BigDecimal getBaseGrade() {
+		return baseGrade;
+	}
+
+	public void setBaseGrade(BigDecimal baseGrade) {
+		this.baseGrade = baseGrade;
 	}
 
 	public String getName() {

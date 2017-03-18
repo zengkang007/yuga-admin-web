@@ -40,10 +40,18 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label">Floor price：</label>
+			<div class="controls">
+				<form:input path="baseGrade" htmlEscape="false" maxlength="5" class="input-xlarge "/>
+				<span class="help-inline"><font color="red">*</font> </span>
+				<span class="help-inline">Enter the floor price  </span>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">Skill Level：</label>
 			<div class="controls">
 				<form:select path="skillLevel" class="input-xlarge ">
-					<form:option value="" label=""/>
+					<form:option value="-1" label="Default"/>
 					<form:options items="${fns:getDictList('yg_cs_skill_level')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</div>
@@ -52,7 +60,7 @@
 			<label class="control-label">Location City：</label>
 			<div class="controls">
 				<form:select path="locationCity" class="input-xlarge ">
-					<form:option value="" label=""/>
+					<form:option value="-1" label="Default"/>
 					<form:options items="${fns:getDictList('yg_cs_location_city')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</div>
@@ -67,15 +75,15 @@
 			<label class="control-label">Start Date：</label>
 			<div class="controls">
 				<input name="startDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-					value="<fmt:formatDate value="${consultant.startDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false});"/>
+					value="<fmt:formatDate value="${consultant.startDate}" pattern="yyyy-MM-dd"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">Out Source：</label>
 			<div class="controls">
 				<form:select path="outSource" class="input-xlarge ">
-					<form:option value="" label=""/>
+					<form:option value="-1" label="Default"/>
 					<form:options items="${fns:getDictList('yg_cs_yesno')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</div>
@@ -84,7 +92,7 @@
 			<label class="control-label">Delivery Mode：</label>
 			<div class="controls">
 				<form:select path="deliveryMode" class="input-xlarge ">
-					<form:option value="" label=""/>
+					<form:option value="-1" label="Default"/>
 					<form:options items="${fns:getDictList('yg_cs_delivery_mode')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</div>
@@ -93,7 +101,7 @@
 			<label class="control-label">Govt Clearnce：</label>
 			<div class="controls">
 				<form:select path="govtClearnce" class="input-xlarge ">
-					<form:option value="" label=""/>
+					<form:option value="-1" label="Default"/>
 					<form:options items="${fns:getDictList('yg_cs_yesno')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</div>

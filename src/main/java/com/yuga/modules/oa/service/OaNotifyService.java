@@ -3,8 +3,13 @@
  */
 package com.yuga.modules.oa.service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import com.yuga.common.utils.IdGen;
+import com.yuga.modules.cst.entity.Consultant;
+import com.yuga.modules.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,5 +84,42 @@ public class OaNotifyService extends CrudService<OaNotifyDao, OaNotify> {
 		oaNotifyRecord.setReadDate(new Date());
 		oaNotifyRecord.setReadFlag("1");
 		oaNotifyRecordDao.update(oaNotifyRecord);
+	}
+
+	/**
+	 * 创建通知消息
+	 * @param consultantId   顾问ID，要预定、拍卖
+	 * @param receiveUserId	 接受通知人ID
+	 * @param title			 标题
+	 * @param content	     内容
+	 * @param type			 类型
+	 */
+	@Transactional(readOnly = false)
+	public void createConsultantNotify(String consultantId,
+										String receiveUserId,
+										String title,
+										String content,
+										String type){
+		OaNotify notify = new OaNotify();
+		notify.setStatus("1");
+		notify.setType(type);
+		notify.setTitle(title);
+		notify.setContent(content);
+		notify.setConsultantId(consultantId);
+
+		logger.info("save notify success, insert user notify.");
+		OaNotifyRecord notifyRecord = new OaNotifyRecord();
+		notifyRecord.setOaNotify(notify);
+		User receiveUser = new User();
+		receiveUser.setId(receiveUserId);
+		notifyRecord.setUser(receiveUser);
+		notifyRecord.setId(IdGen.uuid());
+		notifyRecord.setReadFlag("0");
+		//create receive list
+		List<OaNotifyRecord> lstRecord = new ArrayList<>();
+		lstRecord.add(notifyRecord);
+		notify.setOaNotifyRecordList(lstRecord);
+		save(notify);
+		logger.info("Create a notify success.");
 	}
 }

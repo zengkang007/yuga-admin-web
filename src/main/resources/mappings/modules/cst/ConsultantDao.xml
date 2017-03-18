@@ -17,6 +17,7 @@
 		a.submitter AS "submitter",
 		a.is_book AS "isBook",
 		a.create_date AS "createDate",
+		a.base_grade AS "baseGrade",
 	  	a.book_user_id AS "bookUserId",
 	  	TIMESTAMPDIFF(SECOND, now(), a.bid_valid_end ) AS "biddingLast",
 		b.total_bidding AS "totalBidding",
@@ -73,9 +74,9 @@
 			<if test="govtClearnce != null and govtClearnce != ''">
 				AND a.govt_clearnce = #{govtClearnce}
 			</if>
-			<if test="formStatus != null">
-				AND a.form_status = #{formStatus}
-			</if>
+			<!--<if test="formStatus != null">-->
+				<!--AND a.form_status = #{formStatus}-->
+			<!--</if>-->
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -158,6 +159,7 @@
 			form_status,
 			submitter,
 			is_book,
+			base_grade,
 			create_date,
 			book_user_id
 		) VALUES (
@@ -173,6 +175,7 @@
 			#{formStatus},
 			#{submitter},
 			#{isBook},
+			#{baseGrade},
 			#{createDate},
 			#{bookUserId}
 		)
@@ -192,6 +195,7 @@
 			form_status = #{formStatus},
 			submitter = #{submitter},
 			is_book = #{isBook},
+			base_grade = #{baseGrade},
 			book_user_id = #{bookUserId}
 		WHERE id = #{id}
 	</update>

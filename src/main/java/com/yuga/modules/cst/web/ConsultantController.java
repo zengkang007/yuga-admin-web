@@ -58,13 +58,17 @@ public class ConsultantController extends BaseController {
 		}
 		return entity;
 	}
-	
+
+
 	@RequiresPermissions("cst:consultant:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(Consultant consultant, HttpServletRequest request, HttpServletResponse response, Model model) {
 		//默认查询审核通过的consultant
-		consultant.setFormStatus(FormStatusConst.PASSED);
-		Page<Consultant> page = consultantService.findPage(new Page<Consultant>(request, response), consultant); 
+		//consultant.setFormStatus(FormStatusConst.PASSED);
+		Page<Consultant> qPage = new Page<Consultant>(request, response);
+		qPage.setOrderBy("id desc");
+		Page<Consultant> page = consultantService.findPage(qPage, consultant);
+
 		model.addAttribute("page", page);
 		return "modules/cst/consultantList";
 	}

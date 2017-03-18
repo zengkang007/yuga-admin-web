@@ -20,7 +20,11 @@ import com.yuga.modules.sys.entity.User;
  * @version 2014-05-16
  */
 public class OaNotify extends DataEntity<OaNotify> {
-	
+	final public static String TYPE_REQUEST = "1";
+	final public static String TYPE_NOTIFY = "2";
+	final public static String TYPE_BOOK = "3";
+	final public static String TYPE_BID = "4";
+
 	private static final long serialVersionUID = 1L;
 	private String type;		// 类型
 	private String title;		// 标题
