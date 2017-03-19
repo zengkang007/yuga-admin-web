@@ -95,11 +95,11 @@ public class OaNotifyService extends CrudService<OaNotifyDao, OaNotify> {
 	 * @param type			 类型
 	 */
 	@Transactional(readOnly = false)
-	public void createConsultantNotify(String consultantId,
-										String receiveUserId,
-										String title,
-										String content,
-										String type){
+	public void createNotify(String consultantId,
+							 String receiveUserId,
+							 String title,
+							 String content,
+							 String type){
 		OaNotify notify = new OaNotify();
 		notify.setStatus("1");
 		notify.setType(type);

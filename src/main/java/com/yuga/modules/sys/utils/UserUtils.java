@@ -30,6 +30,7 @@ import com.yuga.modules.sys.entity.Office;
 import com.yuga.modules.sys.entity.Role;
 import com.yuga.modules.sys.entity.User;
 import com.yuga.modules.sys.security.SystemAuthorizingRealm.Principal;
+import org.omg.PortableInterceptor.USER_EXCEPTION;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +77,24 @@ public class UserUtils {
 		}
 		return user;
 	}
-	
+
+	/**
+	 * 获取当前系统管理员列表
+	 * @param id
+	 * @return
+	 */
+	public static List<User> getAdminUserList(){
+		List<User> outList = new ArrayList<>();
+		List<User> inList = userDao.findAllList(new User());
+		for(User user : inList) {
+			if(user.getLoginName().equals(Global.getConfig("roles.admin"))) {
+				outList.add(user);
+			}
+		}
+		outList.add(getUserById("1"));
+		return outList;
+	}
+
 	/**
 	 * 根据ID获取用户
 	 * @param id

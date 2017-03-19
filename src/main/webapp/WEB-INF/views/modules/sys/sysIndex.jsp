@@ -227,7 +227,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-    var leftWidth = 160; // 左侧窗口大小
+    var leftWidth = 185; // 左侧窗口大小
     var tabTitleHeight = 33; // 页签的高度
     var htmlObj = $("html"), mainObj = $("#main");
     var headerObj = $("#header"), footerObj = $("#footer");

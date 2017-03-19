@@ -20,10 +20,13 @@
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/cst/bidding/">Bidding List</a></li>
 	</ul>
-	<form:form id="searchForm" modelAttribute="bidding" action="${ctx}/cst/bidding/listBidder" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="bidding" action="${ctx}/cst/bidding/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
+			<li><label>Bidder：</label>
+				<form:input path="bidderId" htmlEscape="false" maxlength="32" class="input-medium"/>
+			</li>
 			<li><label>Current Bid：</label>
 				<form:input path="currentBid" htmlEscape="false" class="input-medium"/>
 			</li>
@@ -43,37 +46,47 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>Bidder</th>
-				<th>Current Bid</th>
-				<th>Consultant Name</th>
-				<th>Bidding Time</th>
+				<th>publisher Name</th>
+				<th>publisher Email</th>
+				<th>publisher Mobile</th>
+				<th>currentBid</th>
+				<th>bidder Name</th>
+				<th>bidder Email</th>
+				<th>bidder Mobile</th>
+				<th>bidder Time</th>
 				<th>Status</th>
-				<shiro:hasPermission name="cst:bidding:edit"><th>Operate</th></shiro:hasPermission>
 			</tr>
 		</thead>
 		<tbody>
-		<c:forEach items="${page.list}" var="bidding">
+		<c:forEach items="${page.list}" var="tradeBid">
 			<tr>
 				<td>
-					${fns:getUserById(bidding.bidderId).name}
+					${tradeBid.publisherName}
 				</td>
 				<td>
-					${bidding.currentBid}
+					${tradeBid.publisherEmail}
 				</td>
 				<td>
-					${fns:getConsultantById(bidding.consultantId).name}
+					${tradeBid.publisherMobile}
 				</td>
 				<td>
-					<fmt:formatDate value="${bidding.biddingTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					${tradeBid.currentBid}
 				</td>
 				<td>
-					${fns:getDictLabel(bidding.formStatus, 'yg_cs_form_status', '')}
+					${tradeBid.bidderName}
 				</td>
-				<shiro:hasPermission name="cst:bidding:edit"><td>
-					<a href="${ctx}/cst/bidding/updateBidderStatus?id=${bidding.id}&formStatus=1" onclick="return confirmx('Confirm to Accept Bid？', this.href)">Accept</a>
-					|
-					<a href="${ctx}/cst/bidding/updateBidderStatus?id=${bidding.id}&formStatus=-1" onclick="return confirmx('Confirm to DENY Bid？', this.href)"><font color="red">Deny</font></a>
-				</td></shiro:hasPermission>
+				<td>
+					${tradeBid.bidderEmail}
+				</td>
+				<td>
+					${tradeBid.bidderMobile}
+				</td>
+				<td>
+					<fmt:formatDate value="${tradeBid.biddingTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+				</td>
+				<td>
+					${fns:getDictLabel(tradeBid.formStatus, 'yg_cs_form_status', '')}
+				</td>
 			</tr>
 		</c:forEach>
 		</tbody>

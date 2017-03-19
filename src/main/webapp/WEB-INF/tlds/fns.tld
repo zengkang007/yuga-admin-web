@@ -79,7 +79,13 @@
 		<function-signature>com.yuga.modules.sys.entity.User getUser()</function-signature>
 		<example>${fns:getUser()}</example>
 	</function>
-
+	<function>
+		<description>获取当前管理员列表</description>
+		<name>getAdminUserList</name>
+		<function-class>com.yuga.modules.sys.utils.UserUtils</function-class>
+		<function-signature>java.util.List getAdminUserList()</function-signature>
+		<example>${fns:getAdminUserList()}</example>
+	</function>
 	<function>
 		<description>根据编码获取用户对象</description>
 		<name>getUserById</name>
