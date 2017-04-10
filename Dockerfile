@@ -1,4 +1,4 @@
 FROM tomcat
-#Maintainer zengkang #
+#Maintainer zengkang007@163.com
 MAINTAINER zengkang007@163.com
 
