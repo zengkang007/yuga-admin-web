@@ -26,10 +26,7 @@
 	</script>
 </head>
 <body>
-	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/cst/consultant/">Consultant List</a></li>
-		<li class="active"><a href="${ctx}/cst/consultant/form?id=${consultant.id}">Consultant <shiro:hasPermission name="cst:consultant:edit">${not empty consultant.id?'Edit':'Add'}</shiro:hasPermission><shiro:lacksPermission name="cst:consultant:edit">View</shiro:lacksPermission></a></li>
-	</ul><br/>
+<br><br>
 	<form:form id="inputForm" modelAttribute="consultant" action="${ctx}/cst/consultant/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>
@@ -37,11 +34,13 @@
 			<label class="control-label">Consultant Name：</label>
 			<div class="controls">
 				<form:input path="name" htmlEscape="false" maxlength="11" class="input-xlarge "/>
+				<span class="help-inline">Your name will not display. </span>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">Floor price：</label>
 			<div class="controls">
+				<span class="add-on">$</span>
 				<form:input path="baseGrade" htmlEscape="false" maxlength="5" class="input-xlarge "/>
 				<span class="help-inline"><font color="red">*</font> </span>
 				<span class="help-inline">Enter the floor price  </span>
@@ -68,7 +67,22 @@
 		<div class="control-group">
 			<label class="control-label">Project Length：</label>
 			<div class="controls">
-				<form:input path="projectLength" htmlEscape="false" maxlength="11" class="input-xlarge "/>
+				<form:select path="projectType" class="input-xlarge ">
+					<form:option value="-1" label="Default"/>
+					<form:options items="${fns:getDictList('yg_cs_project_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
+				<form:input path="projectLength" htmlEscape="false" maxlength="11" class="input-mini"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">Experience Length：</label>
+			<div class="controls">
+				<form:select path="experienceLen" class="input-xlarge ">
+					<form:option value="-1" label="Default"/>
+					<form:options items="${fns:getDictList('yg_cs_experience')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
+				<span class="help-inline"><font color="red">*</font> </span>
+				<span class="help-inline">Enter the experience year.  </span>
 			</div>
 		</div>
 		<div class="control-group">

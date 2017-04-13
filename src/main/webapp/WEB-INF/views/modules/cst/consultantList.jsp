@@ -17,8 +17,6 @@
 	</script>
 </head>
 <body>
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/cst/consultant/">Consultant List</a></li></ul>
 	<form:form id="searchForm" modelAttribute="consultant" action="${ctx}/cst/consultant/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
@@ -57,6 +55,7 @@
 				</form:select>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="Query"/></li>
+			<li class="btns"><input id="btnRefresh" class="btn btn-primary" type="submit" value="Refresh"/></li>
 			<li class="clearfix"></li>
 		</ul>
 	</form:form>
@@ -73,8 +72,9 @@
 				<th>Delivery Mode</th>
 				<th>Submit Date</th>
 				<th>Submitter</th>
+				<%--<th>Status</th>--%>
 				<th>Bid</th>
-				<th>Operate</th>
+				<%--<th>Operate</th>--%>
 			</tr>
 		</thead>
 		<tbody>
@@ -103,21 +103,31 @@
 					<fmt:formatDate value="${consultant.createDate}" pattern="yyyy-MM-dd HH:mm"/>
 				</td>
 				<td>
-						${fns:getUserById(consultant.submitter).name}
+					${fns:getUserById(consultant.submitter).name}
 				</td>
-				<td>
-					<a href="${ctx}/cst/bidding/bidConfirm?consultantId=${consultant.id}">Place Bid</a>
-				</td>
+				<%--<td>--%>
+					<%--${fns:getDictLabel(consultant.formStatus, 'yg_cs_form_status', '')}--%>
+				<%--</td>--%>
 				<td>
 					<c:choose>
-						<c:when test="${consultant.isBook == 0}">
-							<a href="${ctx}/cst/consultant/bookConfirm?id=${consultant.id}">Book</a>
+						<c:when test="${consultant.formStatus == 3}">
+							Bidded
 						</c:when>
 						<c:otherwise>
-							Booked
+							<a href="${ctx}/cst/bidding/bidConfirm?consultantId=${consultant.id}">Place Bid</a>
 						</c:otherwise>
 					</c:choose>
 				</td>
+				<%--<td>--%>
+					<%--<c:choose>--%>
+						<%--<c:when test="${consultant.isBook == 0}">--%>
+							<%--<a href="${ctx}/cst/consultant/bookConfirm?id=${consultant.id}">Book</a>--%>
+						<%--</c:when>--%>
+						<%--<c:otherwise>--%>
+							<%--Booked--%>
+						<%--</c:otherwise>--%>
+					<%--</c:choose>--%>
+				<%--</td>--%>
 			</tr>
 		</c:forEach>
 		</tbody>

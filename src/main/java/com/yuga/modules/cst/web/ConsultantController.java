@@ -77,7 +77,7 @@ public class ConsultantController extends BaseController {
 	@RequestMapping(value = {"bookConfirm"})
 	public String bookConfirm(Consultant consultant, HttpServletRequest request, HttpServletResponse response, Model model) {
 		//订阅跳转页面
-		consultant.setFormStatus(FormStatusConst.PASSED);
+		consultant.setFormStatus(FormStatusConst.CONSULTANT_BOOKED);
 		Page<Consultant> page = consultantService.findPage(new Page<Consultant>(request, response), consultant);
 		model.addAttribute("page", page);
 		return "modules/cst/consultantConfirm";

@@ -91,7 +91,7 @@ public class UserUtils {
 				outList.add(user);
 			}
 		}
-		outList.add(getUserById("1"));
+		outList.add(getUserById("2"));
 		return outList;
 	}
 

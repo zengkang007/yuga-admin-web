@@ -17,10 +17,7 @@
 	</script>
 </head>
 <body>
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/cst/bidding/">Bidding List</a></li>
-	</ul>
-	<form:form id="searchForm" modelAttribute="bidding" action="${ctx}/cst/bidding/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="bidding" action="${ctx}/cst/bidding/listTradeBid" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">

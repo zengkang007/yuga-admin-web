@@ -12,7 +12,10 @@ package com.yuga.modules.cst.registries;
  * Created by zengk on 2017/1/8.
  */
 public class FormStatusConst {
+    final public static  int BID_DENY = -1;
     final public static int AUDITING = 0;  //审核中
-    final public static int PASSED = 1;    //通过审核
-    final public static int DENY = -1;     //拒绝访问
+    final public static int BID_ACCEPT = 1;
+    final public static int BID_OUT = 2;
+    final public static int CONSULTANT_BIDDED = 3;  //顾问已经被拍卖
+    final public static int CONSULTANT_BOOKED = 4;  //顾问已经被预定
 }

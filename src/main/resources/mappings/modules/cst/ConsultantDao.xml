@@ -19,6 +19,8 @@
 		a.create_date AS "createDate",
 		a.base_grade AS "baseGrade",
 	  	a.book_user_id AS "bookUserId",
+	  	a.project_type AS "projectType",
+	  	a.experience_len AS "experienceLen",
 	  	TIMESTAMPDIFF(SECOND, now(), a.bid_valid_end ) AS "biddingLast",
 		b.total_bidding AS "totalBidding",
 		c.current_bid AS "currentBid"
@@ -161,7 +163,9 @@
 			is_book,
 			base_grade,
 			create_date,
-			book_user_id
+			book_user_id,
+			project_type,
+			experience_len
 		) VALUES (
 			#{skillLevel},
 			#{name},
@@ -177,7 +181,9 @@
 			#{isBook},
 			#{baseGrade},
 			#{createDate},
-			#{bookUserId}
+			#{bookUserId},
+			#{projectType},
+			#{experienceLen}
 		)
 	</insert>
 	
@@ -196,7 +202,9 @@
 			submitter = #{submitter},
 			is_book = #{isBook},
 			base_grade = #{baseGrade},
-			book_user_id = #{bookUserId}
+			book_user_id = #{bookUserId},
+			project_type = #{projectType},
+			experience_len = #{experienceLen}
 		WHERE id = #{id}
 	</update>
 	

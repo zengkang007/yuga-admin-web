@@ -39,6 +39,9 @@ public class Consultant extends DataEntity<Consultant> {
 	private String biddingLast;
 	private String totalBidding;
 	private String currentBid;
+	private Integer projectType;
+	private Integer experienceLen;
+
 
 	public Consultant() {
 		super();
@@ -46,6 +49,22 @@ public class Consultant extends DataEntity<Consultant> {
 
 	public Consultant(String id){
 		super(id);
+	}
+
+	public Integer getProjectType() {
+		return projectType;
+	}
+
+	public void setProjectType(Integer projectType) {
+		this.projectType = projectType;
+	}
+
+	public Integer getExperienceLen() {
+		return experienceLen;
+	}
+
+	public void setExperienceLen(Integer experienceLen) {
+		this.experienceLen = experienceLen;
 	}
 
 	public BigDecimal getBaseGrade() {
