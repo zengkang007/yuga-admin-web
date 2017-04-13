@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuga.modules.cst.dao.BiddingDao">
+    
+	<sql id="BiddingColumns">
+		a.id AS "id",
+		a.bidder_id AS "bidderId",
+		a.current_bid AS "currentBid",
+		a.max_bid AS "maxBid",
+		a.consultant_id AS "consultantId",
+		a.form_status AS "formStatus",
+		a.bidding_time AS "biddingTime",
+		b.login_name AS "submitterName"
+	</sql>
+	
+	<sql id="BiddingJoins">
+		LEFT JOIN sys_user b ON a.bidder_id = b.id
+	</sql>
+    
+	<select id="get" resultType="Bidding">
+		SELECT 
+			<include refid="BiddingColumns"/>
+		FROM yg_bidding a
+		<include refid="BiddingJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findTodoBidderList" resultType="com.yuga.modules.cst.entity.TradeBid">
+		select
+		a.bidder_id, c.login_name as publisherName, c.email as publisherEmail,
+		c.mobile as publisherMobile,
+		d.login_name as bidderName, d.email as bidderEmail, d.mobile as bidderMobile,
+		a.current_bid as currentBid,
+		a.form_status as formStatus,
+		a.bidding_time as biddingTime
+		from yg_bidding a
+		left join yg_consultant b on a.consultant_id = b.id
+		left join sys_user c on c.id = b.submitter
+		left join sys_user d on d.id = a.bidder_id
+		where a.form_status = '1'
+	</select>
+	<select id="findBidderList" resultType="Bidding">
+		SELECT
+		<include refid="BiddingColumns"/>
+		FROM yg_bidding a
+		<include refid="BiddingJoins"/>
+		<where>
+			<if test="currentBid != null and currentBid != ''">
+				AND a.current_bid = #{currentBid}
+			</if>
+			<if test="maxBid != null and maxBid != ''">
+				AND a.max_bid = #{maxBid}
+			</if>
+			<if test="bidderId != null and bidderId != ''">
+				AND consultant_id
+				IN (SELECT id FROM yg_consultant
+				WHERE submitter = #{bidderId})
+			</if>
+			<if test="biddingTime != null and biddingTime != ''">
+				AND a.bidding_time = #{biddingTime}
+			</if>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findOtherBidderList" resultType="Bidding">
+		SELECT
+		<include refid="BiddingColumns"/>
+		FROM yg_bidding a
+		<include refid="BiddingJoins"/>
+		WHERE bidder_id != #{bidderId}
+	</select>
+
+	<select id="findTradeBidList" resultType="com.yuga.modules.cst.entity.TradeBid">
+		SELECT
+		<include refid="BiddingColumns"/>
+		FROM yg_bidding a
+		<include refid="BiddingJoins"/>
+		WHERE form_status = '1'
+	</select>
+
+	<select id="findList" resultType="Bidding">
+		SELECT 
+			<include refid="BiddingColumns"/>
+		FROM yg_bidding a
+		<include refid="BiddingJoins"/>
+		<where>
+			<if test="currentBid != null and currentBid != ''">
+				AND a.current_bid = #{currentBid}
+			</if>
+			<if test="maxBid != null and maxBid != ''">
+				AND a.max_bid = #{maxBid}
+			</if>
+			<if test="bidderId != null and bidderId != ''">
+				AND a.bidder_id = #{bidderId}
+			</if>
+			<if test="biddingTime != null and biddingTime != ''">
+				AND a.bidding_time = #{biddingTime}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getCurrentBid" resultType="String">
+		SELECT
+		current_bid
+		FROM yg_bidding a
+		WHERE  consultant_id = #{consultantId}
+		ORDER BY id DESC
+		LIMIT 1
+	</select>
+
+	<select id="findAllList" resultType="Bidding">
+		SELECT 
+			<include refid="BiddingColumns"/>
+		FROM yg_bidding a
+		<include refid="BiddingJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yg_bidding(
+			bidder_id,
+			current_bid,
+			max_bid,
+			consultant_id,
+			form_status,
+			bidding_time
+		) VALUES (
+			#{bidderId},
+			#{currentBid},
+			#{maxBid},
+			#{consultantId},
+			#{formStatus},
+			#{biddingTime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yg_bidding SET
+			bidder_id = #{bidderId},
+			current_bid = #{currentBid},
+			max_bid = #{maxBid},
+			consultant_id = #{consultantId},
+			form_status = #{formStatus},
+			bidding_time = #{biddingTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM yg_bidding
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

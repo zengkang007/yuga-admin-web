@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuga.modules.cst.dao.YgFavoritesDao">
+    
+	<sql id="ygFavoritesColumns">
+		a.id AS "id",
+		a.job_id AS "jobId",
+		a.consultant_id AS "consultantId",
+		a.create_time AS "createTime",
+		a.user_id AS "user.id",
+		u5.name AS "user.name"
+	</sql>
+	
+	<sql id="ygFavoritesJoins">
+		LEFT JOIN sys_user u5 ON u5.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="YgFavorites">
+		SELECT 
+			<include refid="ygFavoritesColumns"/>
+		FROM yg_favorites a
+		<include refid="ygFavoritesJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="YgFavorites">
+		SELECT 
+			<include refid="ygFavoritesColumns"/>
+		FROM yg_favorites a
+		<include refid="ygFavoritesJoins"/>
+		<where>
+			
+			<if test="jobId != null and jobId != ''">
+				AND a.job_id = #{jobId}
+			</if>
+			<if test="consultantId != null and consultantId != ''">
+				AND a.consultant_id = #{consultantId}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				AND a.create_time = #{createTime}
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="YgFavorites">
+		SELECT 
+			<include refid="ygFavoritesColumns"/>
+		FROM yg_favorites a
+		<include refid="ygFavoritesJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO yg_favorites(
+			job_id,
+			consultant_id,
+			create_time,
+			user_id
+		) VALUES (
+			#{jobId},
+			#{consultantId},
+			#{createTime},
+			#{user.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE yg_favorites SET 	
+			job_id = #{jobId},
+			consultant_id = #{consultantId},
+			create_time = #{createTime},
+			user_id = #{user.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM yg_favorites
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
